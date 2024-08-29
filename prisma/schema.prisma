@@ -1,0 +1,115 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ------------------------------------------------------------------
+// Tables
+// ------------------------------------------------------------------
+
+model User {
+  id               String                @id // UUID
+  name             String // Nome completo
+  email            String                @unique // Email
+  emailVerified    Boolean               @default(false) // Email verificado
+  password         String // Senha criptografada
+  document         String                @unique // Documento de indentificação
+  documentType     DocumentEnum // Tipo de documento
+  documentVerified Boolean               @default(false) // Documento verificado (usuário verificado)
+  pictureUrl       String // URL da foto de perfil
+  phone            String // Telefone ou celular
+  phoneVerified    Boolean               @default(false) // Telefone verificado
+  scopes           String[] // Escopos que o usuário tem acesso
+  role             RoleEnum // Papel do usuário
+  birthday         DateTime // Data de nascimento
+  createdAt        DateTime              @default(now()) // Data de criação
+  updatedAt        DateTime              @default(now()) @updatedAt // Data de atualização
+  sessions         Session[] // Sessões do usuário
+  addresses        Address[] // Endereços do usuário
+  organizations    OrganizationMembers[] // Organizações que o usuário faz parte  
+}
+
+model Organization {
+  id           String                @id // UUID
+  name         String // Nome
+  email        String // Email 
+  phone        String // Telefone
+  verified     Boolean               @default(false) // Organização verificada
+  document     String // Documento de identificação
+  documentType DocumentEnum // Tipo de documento
+  pictureUrl   String // URL da foto de perfil
+  createdAt    DateTime              @default(now()) // Data de criação
+  updatedAt    DateTime              @default(now()) @updatedAt // Data de atualização
+  addresses    Address[] // Endereços da organização
+  members      OrganizationMembers[] // Membros da organização
+}
+
+model OrganizationMembers {
+  id             String               @id // UUID
+  userId         String // ID do usuário
+  organizationId String // ID da organização
+  role           RoleOrganizationEnum // Papel do usuário na organização
+  scopes         String[] // Escopos que o usuário tem acesso na organização
+  createdAt      DateTime             @default(now()) // Data de criação
+  updatedAt      DateTime             @default(now()) @updatedAt // Data de atualização
+  user           User                 @relation(fields: [userId], references: [id]) // Usuário
+  organization   Organization         @relation(fields: [organizationId], references: [id]) // Organização
+}
+
+model Address {
+  id             String        @id // UUID
+  userId         String // ID do usuário
+  organizationId String? // ID da organização, se for nulo é um endereço do usuário
+  street         String // Rua
+  number         String // Número
+  complement     String // Complemento
+  neighborhood   String // Bairro
+  city           String // Cidade
+  state          String // Estado
+  country        String // País
+  zipCode        String // CEP
+  createdAt      DateTime      @default(now()) // Data de criação
+  updatedAt      DateTime      @default(now()) @updatedAt // Data de atualização
+  user           User          @relation(fields: [userId], references: [id]) // Usuário
+  organization   Organization? @relation(fields: [organizationId], references: [id]) // Organização
+}
+
+model Session {
+  id         String   @id // UUID (refresh token)
+  userId     String // ID do usuário
+  content    String // Conteúdo da sessão
+  identifier String // Identificador da sessão
+  ip         String // IP do usuário
+  createdAt  DateTime @default(now()) // Data de criação
+  updatedAt  DateTime @default(now()) @updatedAt // Data de atualização
+  user       User     @relation(fields: [userId], references: [id]) // Usuário
+}
+
+// Documentos de identificação
+enum DocumentEnum {
+  CPF
+  CNPJ
+  PASSAPORT
+  RG
+  CNH
+  UNKNOW
+}
+
+// Papéis dos usuários no sistema
+enum RoleEnum {
+  ADMIN
+  MODERATOR
+  USER
+}
+
+// Papéis dos usuários nas organizações
+enum RoleOrganizationEnum {
+  OWNER
+  MODERATOR
+  USER
+  SUPERVISOR
+}

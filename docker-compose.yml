@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  edusocial-db:
+    image: postgres
+    restart: always
+    container_name: edusocial-db
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: docker
+      POSTGRES_DB: edusocial
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/data/postgres
+
+volumes:
+  pgdata:
+    driver: local

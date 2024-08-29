@@ -1,0 +1,31 @@
+# Dependências do Node.js
+node_modules/
+
+# Arquivos gerados pelo TypeScript
+build/
+*.tsbuildinfo
+
+# Arquivos de log
+*.log
+
+# Arquivos de backup
+*~
+
+# Arquivos de configuração do Visual Studio Code
+.vscode/
+
+# Arquivos de configuração do ambiente de desenvolvimento
+.env
+
+# Cache do Prisma
+.prisma/
+
+# Pasta migrations do prims
+prisma/migrations
+
+# Arquivo de banco de dados SQLite (caso esteja sendo usado)
+*.db
+
+.DS_Store
+
+yarn.lock
