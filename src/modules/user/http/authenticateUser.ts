@@ -4,6 +4,9 @@ import { AppError } from '@/functions/AppError'
 
 import user from '../user.service'
 
+/**
+ * Autentica usuario com email e senha
+ */
 export default async function authenticateUser(request: Request, response: Response, next: NextFunction) {
     try {
         const { email, password } = request.body

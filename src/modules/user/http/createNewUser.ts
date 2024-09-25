@@ -6,6 +6,9 @@ import { gravatarProfilePictureUrl } from '@/functions/gravatar'
 
 import user from '../user.service'
 
+/**
+ * Cria novo usuario
+ */
 export default async function createNewUser(request: Request, response: Response, next: NextFunction) {
     try {
         let { name, password, email, birthday, pictureUrl, phone } = request.body
@@ -27,7 +30,9 @@ export default async function createNewUser(request: Request, response: Response
         }
 
         if (password.length < 8) {
-            throw new AppError('Password entered is too weak. Please choose a stronger password with at least 8 characters, including uppercase and lowercase letters, and numbers')
+            throw new AppError(
+                'Password entered is too weak. Please choose a stronger password with at least 8 characters, including uppercase and lowercase letters, and numbers'
+            )
         }
 
         if (!pictureUrl || typeof pictureUrl !== 'string') {
@@ -42,12 +47,12 @@ export default async function createNewUser(request: Request, response: Response
             email,
             birthday: new Date(birthday),
             pictureUrl,
-            phone
+            phone,
         })
 
         response.status(201).json({
             id,
-            createdAt
+            createdAt,
         })
     } catch (e) {
         next(e)

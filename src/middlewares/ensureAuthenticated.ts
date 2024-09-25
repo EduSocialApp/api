@@ -32,6 +32,7 @@ export async function ensureAuthenticated(request: Request, response: Response, 
         request.user = {
             id: userId,
             scopes: user.scopes,
+            role: user.role,
         }
 
         next()

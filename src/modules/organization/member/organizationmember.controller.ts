@@ -28,6 +28,15 @@ export default class OrganizationMemberController {
         })
     }
 
+    findByUserIdAndOrganizationId(userId: string, organizationId: string) {
+        return this.prisma.findFirst({
+            where: {
+                userId,
+                organizationId,
+            },
+        })
+    }
+
     updateScopes(id: string, scopes: string[]) {
         return this.prisma.update({
             where: {

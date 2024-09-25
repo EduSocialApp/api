@@ -6,6 +6,11 @@ import { NextFunction, Request, Response } from 'express'
 import organization from '../organization.service'
 import organizationMember from '../member/organizationmember.service'
 
+/**
+ * Cria nova organizacao
+ * - Somente usuarios com a permissao `userScopes.organization.create` podem criar uma organizacao
+ * - Inicialmente, todos usuarios terao a permissao para criar uma organizacao
+ */
 export default async function createNewOrganization(request: Request, response: Response, next: NextFunction) {
     try {
         // Verifica se o usuário tem permissão para criar uma organização
@@ -33,7 +38,7 @@ export default async function createNewOrganization(request: Request, response: 
         await organizationMember.create({
             userId: request.user.id,
             organizationId: id,
-            role: 'OWNER',
+            role: 'OWNER', // Define o usuário como dono da organização
             scopes: [],
         })
 
