@@ -3,6 +3,7 @@ import { DocumentEnum } from '@prisma/client'
 import uuid from '@/functions/uuid'
 
 import { prisma } from '../db'
+import { userScopes } from './user.scopes'
 
 export default class UserController {
     private prisma = prisma.user
@@ -13,7 +14,7 @@ export default class UserController {
         password,
         pictureUrl,
         phone,
-        birthday
+        birthday,
     }: {
         name: string
         email: string
@@ -22,7 +23,6 @@ export default class UserController {
         phone: string
         birthday: Date
     }) {
-
         return this.prisma.create({
             data: {
                 id: uuid(),
@@ -35,32 +35,32 @@ export default class UserController {
                 phone,
                 birthday,
                 role: 'USER',
-                scopes: ['CREATE_ORGANIZATION']
-            }
+                scopes: [userScopes.organization.create],
+            },
         })
     }
 
     findById(id: string) {
         return this.prisma.findUnique({
             where: {
-                id
-            }
+                id,
+            },
         })
     }
 
     findByEmail(email: string) {
         return this.prisma.findUnique({
             where: {
-                email
-            }
+                email,
+            },
         })
     }
 
     findByDocument(document: string) {
         return this.prisma.findUnique({
             where: {
-                document
-            }
+                document,
+            },
         })
     }
 
@@ -68,8 +68,8 @@ export default class UserController {
         return this.prisma.findFirst({
             where: {
                 email,
-                password
-            }
+                password,
+            },
         })
     }
 }
