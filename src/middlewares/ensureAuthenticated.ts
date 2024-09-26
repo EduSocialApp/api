@@ -11,16 +11,16 @@ interface Payload {
  * Middleware para garantir que o usuário está autenticado e adiciona dados do usuário na requisição
  */
 export async function ensureAuthenticated(request: Request, response: Response, next: NextFunction) {
-    const authHeader = request.headers.authorization
-
-    if (!authHeader) {
-        throw new AppError('Token missing!', 401)
-    }
-
-    // Bearer token
-    const [, token] = authHeader.split(' ')
-
     try {
+        const authHeader = request.headers.authorization
+
+        if (!authHeader) {
+            throw new AppError('Token missing!', 401)
+        }
+
+        // Bearer token
+        const [, token] = authHeader.split(' ')
+
         const { sub: userId } = verifyAcessToken(token) as Payload
 
         const user = await dbUser.findById(userId)
@@ -37,6 +37,6 @@ export async function ensureAuthenticated(request: Request, response: Response, 
 
         next()
     } catch (e) {
-        throw new AppError('Invalid token!', 401)
+        next(e)
     }
 }
