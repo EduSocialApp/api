@@ -4,26 +4,22 @@ import { prisma } from '../../db'
 import { RoleOrganizationEnum } from '@prisma/client'
 
 export default class OrganizationMemberController {
-    private prisma = prisma.organizationMembers
+    private prisma = prisma.organizationMember
 
     async create({
         organizationId,
         role = RoleOrganizationEnum.USER,
-        scopes,
         userId,
     }: {
         userId: string
         organizationId: string
-        scopes: string[]
         role?: RoleOrganizationEnum
     }) {
         return this.prisma.create({
             data: {
-                id: uuid(),
                 userId,
                 organizationId,
                 role,
-                scopes,
             },
         })
     }
@@ -37,21 +33,27 @@ export default class OrganizationMemberController {
         })
     }
 
-    updateScopes(id: string, scopes: string[]) {
+    updateMemberRole(userId: string, organizationId: string, role: RoleOrganizationEnum) {
         return this.prisma.update({
             where: {
-                id,
+                userId_organizationId: {
+                    userId,
+                    organizationId,
+                },
             },
             data: {
-                scopes,
+                role,
             },
         })
     }
 
-    deleteLink(id: string) {
+    deleteLink(userId: string, organizationId: string) {
         return this.prisma.delete({
             where: {
-                id,
+                userId_organizationId: {
+                    userId,
+                    organizationId,
+                },
             },
         })
     }

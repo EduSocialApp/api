@@ -39,7 +39,6 @@ export default async function createNewOrganization(request: Request, response: 
             userId: request.user.id,
             organizationId: id,
             role: 'OWNER', // Define o usuário como dono da organização
-            scopes: [],
         })
 
         response.status(201).json({

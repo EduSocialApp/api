@@ -30,7 +30,7 @@ model User {
   updatedAt        DateTime              @default(now()) @updatedAt // Data de atualização
   sessions         Session[] // Sessões do usuário
   addresses        Address[] // Endereços do usuário
-  organizations    OrganizationMembers[] // Organizações que o usuário faz parte  
+  organizations    OrganizationMember[] // Organizações que o usuário faz parte  
 }
 
 model Organization {
@@ -45,19 +45,19 @@ model Organization {
   createdAt    DateTime              @default(now()) // Data de criação
   updatedAt    DateTime              @default(now()) @updatedAt // Data de atualização
   addresses    Address[] // Endereços da organização
-  members      OrganizationMembers[] // Membros da organização
+  members      OrganizationMember[] // Membros da organização
 }
 
-model OrganizationMembers {
-  id             String               @id // UUID
+model OrganizationMember {
   userId         String // ID do usuário
   organizationId String // ID da organização
   role           RoleOrganizationEnum // Papel do usuário na organização
-  scopes         String[] // Escopos que o usuário tem acesso na organização
   createdAt      DateTime             @default(now()) // Data de criação
   updatedAt      DateTime             @default(now()) @updatedAt // Data de atualização
   user           User                 @relation(fields: [userId], references: [id]) // Usuário
   organization   Organization         @relation(fields: [organizationId], references: [id]) // Organização
+
+   @@id([userId, organizationId])
 }
 
 model Address {
@@ -111,5 +111,4 @@ enum RoleOrganizationEnum {
   OWNER
   MODERATOR
   USER
-  SUPERVISOR
 }
