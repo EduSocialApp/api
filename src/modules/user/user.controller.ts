@@ -1,5 +1,3 @@
-import { DocumentEnum } from '@prisma/client'
-
 import uuid from '@/functions/uuid'
 
 import { prisma } from '../db'
