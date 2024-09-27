@@ -17,6 +17,7 @@ export default class OrganizationMemberController {
     }) {
         return this.prisma.create({
             data: {
+                id: uuid(),
                 userId,
                 organizationId,
                 role,
@@ -34,12 +35,10 @@ export default class OrganizationMemberController {
     }
 
     updateMemberRole(userId: string, organizationId: string, role: RoleOrganizationEnum) {
-        return this.prisma.update({
+        return this.prisma.updateMany({
             where: {
-                userId_organizationId: {
-                    userId,
-                    organizationId,
-                },
+                userId,
+                organizationId,
             },
             data: {
                 role,
@@ -48,12 +47,10 @@ export default class OrganizationMemberController {
     }
 
     deleteLink(userId: string, organizationId: string) {
-        return this.prisma.delete({
+        return this.prisma.deleteMany({
             where: {
-                userId_organizationId: {
-                    userId,
-                    organizationId,
-                },
+                userId,
+                organizationId,
             },
         })
     }

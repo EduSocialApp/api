@@ -51,6 +51,7 @@ export default class UserController {
                         },
                     },
                     select: {
+                        id: true,
                         role: true,
                         organization: {
                             select: {
