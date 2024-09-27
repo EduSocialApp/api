@@ -14,6 +14,6 @@ orgRoutes.post('/create', ensureAuthenticated, createNewOrganization)
 orgRoutes.post('/link', ensureAuthenticated, linkUserOrganization)
 orgRoutes.post('/unlink', ensureAuthenticated, unlinkUserOrganization)
 
-orgRoutes.post('/approve', ensureAuthenticated, approveOrganization)
+orgRoutes.post('/approve/:id', ensureAuthenticated, approveOrganization)
 
 export { orgRoutes }

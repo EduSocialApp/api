@@ -12,38 +12,38 @@ datasource db {
 // ------------------------------------------------------------------
 
 model User {
-  id               String                @id // UUID
+  id               String               @id // UUID
   name             String // Nome completo
-  email            String                @unique // Email
-  emailVerified    Boolean               @default(false) // Email verificado
+  email            String               @unique // Email
+  emailVerified    Boolean              @default(false) // Email verificado
   password         String // Senha criptografada
-  document         String                @unique // Documento de indentificação
+  document         String // Documento de indentificação
   documentType     DocumentEnum // Tipo de documento
-  documentVerified Boolean               @default(false) // Documento verificado (usuário verificado)
+  documentVerified Boolean              @default(false) // Documento verificado (usuário verificado)
   pictureUrl       String // URL da foto de perfil
   phone            String // Telefone ou celular
-  phoneVerified    Boolean               @default(false) // Telefone verificado
+  phoneVerified    Boolean              @default(false) // Telefone verificado
   scopes           String[] // Escopos que o usuário tem acesso
   role             RoleEnum // Papel do usuário
   birthday         DateTime // Data de nascimento
-  createdAt        DateTime              @default(now()) // Data de criação
-  updatedAt        DateTime              @default(now()) @updatedAt // Data de atualização
+  createdAt        DateTime             @default(now()) // Data de criação
+  updatedAt        DateTime             @default(now()) @updatedAt // Data de atualização
   sessions         Session[] // Sessões do usuário
   addresses        Address[] // Endereços do usuário
   organizations    OrganizationMember[] // Organizações que o usuário faz parte  
 }
 
 model Organization {
-  id           String                @id // UUID
+  id           String               @id // UUID
   name         String // Nome
   email        String // Email 
   phone        String // Telefone
-  verified     Boolean               @default(false) // Organização verificada
+  verified     Boolean              @default(false) // Organização verificada
   document     String // Documento de identificação
   documentType DocumentEnum // Tipo de documento
   pictureUrl   String // URL da foto de perfil
-  createdAt    DateTime              @default(now()) // Data de criação
-  updatedAt    DateTime              @default(now()) @updatedAt // Data de atualização
+  createdAt    DateTime             @default(now()) // Data de criação
+  updatedAt    DateTime             @default(now()) @updatedAt // Data de atualização
   addresses    Address[] // Endereços da organização
   members      OrganizationMember[] // Membros da organização
 }
@@ -57,7 +57,7 @@ model OrganizationMember {
   user           User                 @relation(fields: [userId], references: [id]) // Usuário
   organization   Organization         @relation(fields: [organizationId], references: [id]) // Organização
 
-   @@id([userId, organizationId])
+  @@id([userId, organizationId])
 }
 
 model Address {

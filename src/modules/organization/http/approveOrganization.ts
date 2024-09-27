@@ -4,6 +4,11 @@ import { NextFunction, Request, Response } from 'express'
 
 import organization from '../organization.service'
 
+function hasPermissionToApproveOrganization(user: Request['user']) {
+    console.log(user.role)
+    return user.role === 'ADMIN' || user.role === 'MODERATOR' || user.scopes.includes(userScopes.organization.approve)
+}
+
 /**
  * Aprova uma organizacao
  * - Somente ADMINISTRADORES, MODERADOS e usuarios com a permissao `userScopes.organization.approve` podem aprovar uma organizacao
@@ -13,7 +18,7 @@ export default async function approveOrganization(request: Request, response: Re
         let { id } = request.params
 
         // Verifica se o usuário tem permissão para aprovar uma organização
-        if (request.user.role !== 'ADMIN' && request.user.role !== 'MODERATOR' && !request.user.scopes.includes(userScopes.organization.approve)) {
+        if (!hasPermissionToApproveOrganization(request.user)) {
             throw new AppError('Permission denied', 403)
         }
 

@@ -38,6 +38,33 @@ export default class UserController {
         })
     }
 
+    findByIdDetailed(id: string) {
+        return this.prisma.findUnique({
+            where: {
+                id,
+            },
+            include: {
+                organizations: {
+                    where: {
+                        organization: {
+                            verified: true,
+                        },
+                    },
+                    select: {
+                        role: true,
+                        organization: {
+                            select: {
+                                id: true,
+                                name: true,
+                                pictureUrl: true,
+                            },
+                        },
+                    },
+                },
+            },
+        })
+    }
+
     findById(id: string) {
         return this.prisma.findUnique({
             where: {
@@ -55,7 +82,7 @@ export default class UserController {
     }
 
     findByDocument(document: string) {
-        return this.prisma.findUnique({
+        return this.prisma.findFirst({
             where: {
                 document,
             },
