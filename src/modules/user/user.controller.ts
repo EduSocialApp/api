@@ -13,6 +13,11 @@ export default class UserController {
         pictureUrl,
         phone,
         birthday,
+        connectWithNeighbors,
+        privacyPolicy,
+        receiveEmails,
+        receiveNotifications,
+        termsOfUse,
     }: {
         name: string
         email: string
@@ -20,6 +25,11 @@ export default class UserController {
         pictureUrl: string
         phone: string
         birthday: Date
+        connectWithNeighbors?: boolean
+        privacyPolicy?: boolean
+        receiveEmails?: boolean
+        receiveNotifications?: boolean
+        termsOfUse?: boolean
     }) {
         return this.prisma.create({
             data: {
@@ -33,6 +43,11 @@ export default class UserController {
                 phone,
                 birthday,
                 role: 'USER',
+                connectWithNeighbors,
+                privacyAccepted: privacyPolicy,
+                receiveEmails,
+                receiveNotifications,
+                termsAccepted: termsOfUse,
                 scopes: [userScopes.organization.create],
             },
         })

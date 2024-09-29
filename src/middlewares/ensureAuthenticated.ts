@@ -15,7 +15,7 @@ export async function ensureAuthenticated(request: Request, response: Response, 
         const authHeader = request.headers.authorization
 
         if (!authHeader) {
-            throw new AppError('Token missing!', 401)
+            throw new AppError('Token missing', 401)
         }
 
         // Bearer token
@@ -26,7 +26,7 @@ export async function ensureAuthenticated(request: Request, response: Response, 
         const user = await dbUser.findById(userId)
 
         if (!user) {
-            throw new AppError('User not found!', 401)
+            throw new AppError('User not found', 401)
         }
 
         request.user = {

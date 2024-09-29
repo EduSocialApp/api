@@ -12,33 +12,38 @@ datasource db {
 // ------------------------------------------------------------------
 
 model User {
-  id               String               @id // UUID
-  name             String // Nome completo
-  email            String               @unique // Email
-  emailVerified    Boolean              @default(false) // Email verificado
-  password         String // Senha criptografada
-  document         String // Documento de indentificação
-  documentType     DocumentEnum // Tipo de documento
-  documentVerified Boolean              @default(false) // Documento verificado (usuário verificado)
-  pictureUrl       String // URL da foto de perfil
-  phone            String // Telefone ou celular
-  phoneVerified    Boolean              @default(false) // Telefone verificado
-  scopes           String[] // Escopos que o usuário tem acesso
-  adressesIds      String[] // IDs dos endereços do usuário
-  role             RoleEnum // Papel do usuário
-  birthday         DateTime // Data de nascimento
-  createdAt        DateTime             @default(now()) // Data de criação
-  updatedAt        DateTime             @default(now()) @updatedAt // Data de atualização
-  sessions         Session[] // Sessões do usuário
-  organizations    OrganizationMember[] // Organizações que o usuário faz parte  
-  supervisedUsers  SupervisedUser[]     @relation("SupervisedUsers") // Usuários supervisionados
-  supervisorUsers  SupervisedUser[]     @relation("SupervisorUsers") // Usuários que supervisionam este usuário
-  posts            Post[] // Posts do usuário
-  likes            PostLike[] // Curtidas do usuário
-  comments         PostComment[] // Comentários do usuário
-  addresses        UserAddress[] // Endereços do usuário
-  reports          UserReport[]         @relation("ReportedUser") // Comunicados feitos para o usuário
-  reportsCreated   UserReport[]         @relation("ReportAuthor") // Comunicados feitos pelo usuário
+  id                   String               @id // UUID
+  name                 String // Nome completo
+  email                String               @unique // Email
+  emailVerified        Boolean              @default(false) // Email verificado
+  password             String // Senha criptografada
+  document             String // Documento de indentificação
+  documentType         DocumentEnum // Tipo de documento
+  documentVerified     Boolean              @default(false) // Documento verificado (usuário verificado)
+  pictureUrl           String // URL da foto de perfil
+  phone                String // Telefone ou celular
+  phoneVerified        Boolean              @default(false) // Telefone verificado
+  scopes               String[] // Escopos que o usuário tem acesso
+  adressesIds          String[] // IDs dos endereços do usuário
+  role                 RoleEnum // Papel do usuário
+  birthday             DateTime // Data de nascimento
+  receiveEmails        Boolean              @default(true) // Receber emails
+  receiveNotifications Boolean              @default(true) // Receber notificações
+  connectWithNeighbors Boolean              @default(true) // Conectar com a agenda do celular
+  termsAccepted        Boolean              @default(false) // Termos de uso aceitos
+  privacyAccepted      Boolean              @default(false) // Política de privacidade aceita
+  createdAt            DateTime             @default(now()) // Data de criação
+  updatedAt            DateTime             @default(now()) @updatedAt // Data de atualização
+  sessions             Session[] // Sessões do usuário
+  organizations        OrganizationMember[] // Organizações que o usuário faz parte  
+  supervisedUsers      SupervisedUser[]     @relation("SupervisedUsers") // Usuários supervisionados
+  supervisorUsers      SupervisedUser[]     @relation("SupervisorUsers") // Usuários que supervisionam este usuário
+  posts                Post[] // Posts do usuário
+  likes                PostLike[] // Curtidas do usuário
+  comments             PostComment[] // Comentários do usuário
+  addresses            UserAddress[] // Endereços do usuário
+  reports              UserReport[]         @relation("ReportedUser") // Comunicados feitos para o usuário
+  reportsCreated       UserReport[]         @relation("ReportAuthor") // Comunicados feitos pelo usuário
 }
 
 model UserReport {

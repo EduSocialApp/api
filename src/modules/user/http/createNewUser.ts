@@ -11,7 +11,15 @@ import user from '../user.service'
  */
 export default async function createNewUser(request: Request, response: Response, next: NextFunction) {
     try {
-        let { name, password, email, birthday, pictureUrl, phone } = request.body
+        let {
+            name,
+            password,
+            email,
+            birthday,
+            pictureUrl,
+            phone,
+            permissions: { connectWithNeighbors, privacyPolicy, receiveEmails, receiveNotifications, termsOfUse },
+        } = request.body
 
         if (!phone || typeof phone !== 'string') {
             phone = ''
@@ -23,6 +31,14 @@ export default async function createNewUser(request: Request, response: Response
 
         if (!name || !password || !email || !birthday) {
             throw new AppError('Required fields are missing')
+        }
+
+        if (termsOfUse !== true) {
+            throw new AppError('You must accept the terms of use')
+        }
+
+        if (privacyPolicy !== true) {
+            throw new AppError('You must accept the privacy policy')
         }
 
         if (await user.findByEmail(email)) {
@@ -48,6 +64,11 @@ export default async function createNewUser(request: Request, response: Response
             birthday: new Date(birthday),
             pictureUrl,
             phone,
+            connectWithNeighbors,
+            privacyPolicy,
+            receiveEmails,
+            receiveNotifications,
+            termsOfUse,
         })
 
         response.status(201).json({
