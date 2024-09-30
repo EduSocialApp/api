@@ -7,7 +7,9 @@ import { AppError } from '@/functions/AppError'
  */
 export default async function getUserById(request: Request, response: Response, next: NextFunction) {
     try {
-        const { id } = request.params
+        let { id } = request.params
+
+        if (id === 'me') id = request.user.id
 
         const user = await dbUser.findByIdDetailed(id)
 
