@@ -53,6 +53,17 @@ export default class UserController {
         })
     }
 
+    updateProfilePictureUrl(id: string, pictureUrl: string) {
+        return this.prisma.update({
+            where: {
+                id,
+            },
+            data: {
+                pictureUrl,
+            },
+        })
+    }
+
     findByIdDetailed(id: string) {
         return this.prisma.findUnique({
             where: {

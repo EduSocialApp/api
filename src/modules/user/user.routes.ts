@@ -6,6 +6,9 @@ import authenticateUser from './http/authenticateUser'
 import createNewUser from './http/createNewUser'
 import { ensureAuthenticated } from '@/middlewares/ensureAuthenticated'
 import getUserById from './http/getUserById'
+import { uploadSingleFileMiddleware } from '@/middlewares/multer'
+import profilePicture from './http/profilePicture'
+import { uploadS3Middleware } from '@/middlewares/uploadS3'
 
 const userRoutes = Router()
 
@@ -15,5 +18,7 @@ userRoutes.patch('/login', renewToken)
 userRoutes.post('/register', createNewUser)
 
 userRoutes.get('/:id', ensureAuthenticated, getUserById)
+
+userRoutes.patch('/profilePicture', ensureAuthenticated, uploadSingleFileMiddleware, uploadS3Middleware, profilePicture)
 
 export { userRoutes }
