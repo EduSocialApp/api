@@ -22,4 +22,15 @@ export default class OrganizationAddressController {
             },
         })
     }
+
+    findAddressesByOrganizationId(organizationId: string) {
+        return this.prisma.findMany({
+            where: {
+                organizationId,
+            },
+            include: {
+                address: true,
+            },
+        })
+    }
 }

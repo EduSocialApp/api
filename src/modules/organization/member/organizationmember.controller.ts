@@ -46,10 +46,34 @@ export default class OrganizationMemberController {
         })
     }
 
+    listByUserId(userId: string) {
+        return this.prisma.findMany({
+            where: {
+                userId,
+            },
+            select: {
+                organization: true,
+                createdAt: true,
+                role: true,
+            },
+            orderBy: {
+                createdAt: 'desc',
+            },
+        })
+    }
+
     deleteLink(userId: string, organizationId: string) {
         return this.prisma.deleteMany({
             where: {
                 userId,
+                organizationId,
+            },
+        })
+    }
+
+    deleteAllLinksByOrganizationId(organizationId: string) {
+        return this.prisma.deleteMany({
+            where: {
                 organizationId,
             },
         })

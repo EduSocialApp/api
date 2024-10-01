@@ -41,4 +41,12 @@ export default class AddressController {
             },
         })
     }
+
+    delete(id: string) {
+        return this.prisma.delete({
+            where: {
+                id,
+            },
+        })
+    }
 }
