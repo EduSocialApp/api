@@ -75,4 +75,12 @@ export default class OrganizationController {
             },
         })
     }
+
+    delete(id: string) {
+        return this.prisma.delete({
+            where: {
+                id,
+            },
+        })
+    }
 }

@@ -127,21 +127,22 @@ model SupervisedUser {
 }
 
 model Organization {
-  id              String                @id // UUID
-  name            String // Nome
-  email           String // Email 
-  phone           String // Telefone
-  verified        Boolean               @default(false) // Organização verificada
-  document        String // Documento de identificação
-  documentType    DocumentEnum // Tipo de documento
-  pictureUrl      String // URL da foto de perfil
-  createdAt       DateTime              @default(now()) // Data de criação
-  updatedAt       DateTime              @default(now()) @updatedAt // Data de atualização
-  members         OrganizationMember[] // Membros da organização
-  events          OrganizationEvent[] // Eventos da organização
-  posts           Post[] // Posts da organização
-  addresses       OrganizationAddress[] // Endereços da organização
-  reportsReleased UserReport[] // Comunicados feitos pela organização
+  id                          String                @id // UUID
+  name                        String // Nome
+  email                       String // Email 
+  phone                       String // Telefone
+  verified                    Boolean               @default(false) // Organização verificada
+  rejectedVerificationMessage String? // Mensagem de rejeição da verificação
+  document                    String // Documento de identificação
+  documentType                DocumentEnum // Tipo de documento
+  pictureUrl                  String // URL da foto de perfil
+  createdAt                   DateTime              @default(now()) // Data de criação
+  updatedAt                   DateTime              @default(now()) @updatedAt // Data de atualização
+  members                     OrganizationMember[] // Membros da organização
+  events                      OrganizationEvent[] // Eventos da organização
+  posts                       Post[] // Posts da organização
+  addresses                   OrganizationAddress[] // Endereços da organização
+  reportsReleased             UserReport[] // Comunicados feitos pela organização
 }
 
 model OrganizationAddress {
@@ -188,6 +189,7 @@ model Address {
   state                     String // Estado
   country                   String // País
   zipCode                   String // CEP
+  ibgeCode                  String // Código IBGE
   geolocation               String // Geolocalização
   createdAt                 DateTime              @default(now()) // Data de criação
   updatedAt                 DateTime              @default(now()) @updatedAt // Data de atualização
