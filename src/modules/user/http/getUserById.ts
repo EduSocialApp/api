@@ -19,7 +19,7 @@ export default async function getUserById(request: Request, response: Response, 
 
         const { name, email, pictureUrl, phone, organizations } = user
 
-        response.status(200).json({ name, email, pictureUrl, phone, id, organizations })
+        response.status(200).json({ name, pictureUrl, id, organizations })
     } catch (e) {
         next(e)
     }

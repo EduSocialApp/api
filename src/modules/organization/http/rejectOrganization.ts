@@ -15,12 +15,6 @@ export default async function rejectOrganization(request: Request, response: Res
             throw new AppError('Reason is required', 400)
         }
 
-        const org = await organization.findById(id)
-
-        if (!org) {
-            throw new AppError('Organization not found', 404)
-        }
-
         await organization.setVerified(id, false, reason)
 
         response.status(200).json({

@@ -3,7 +3,7 @@ import dbUser from '../user.service'
 import { AppError } from '@/functions/AppError'
 
 /**
- * Atualiza a foto de perfil do usuário
+ * Atualiza a foto de perfil do usuário logado
  */
 export default async function profilePicture(request: Request, response: Response, next: NextFunction) {
     try {

@@ -2,6 +2,9 @@ import { NextFunction, Request, Response } from 'express'
 
 import organizationService from '../organization.service'
 
+/**
+ * Retorna lista de organizações
+ */
 export default async function organizationsList(request: Request, response: Response, next: NextFunction) {
     try {
         const { name, email, document } = request.query as { name?: string; email?: string; document?: string }

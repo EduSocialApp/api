@@ -32,12 +32,8 @@ function hasPermissionToUnlink(user: Request['user'], orgMemberRole: RoleOrganiz
  */
 export default async function unlinkUserOrganization(request: Request, response: Response, next: NextFunction) {
     try {
-        const { organizationId, userId } = request.body
-
-        const org = await organization.findById(organizationId)
-        if (!org) {
-            throw new AppError('Organization not found', 404)
-        }
+        const { id: organizationId } = request.params
+        const { userId } = request.body
 
         // Usuario logado na organizacao informada na requisicao
         const userLoggedOrgLink = await organizationMember.findByUserIdAndOrganizationId(request.user.id, organizationId)

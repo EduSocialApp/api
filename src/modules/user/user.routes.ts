@@ -12,13 +12,13 @@ import { uploadS3Middleware } from '@/middlewares/uploadS3'
 
 const userRoutes = Router()
 
-userRoutes.post('/login', authenticateUser)
-userRoutes.patch('/login', renewToken)
-
+// Basicas
 userRoutes.post('/register', createNewUser)
-
 userRoutes.get('/:id', ensureAuthenticated, getUserById)
 
+// Pessoal
+userRoutes.post('/login', authenticateUser)
+userRoutes.patch('/login', renewToken)
 userRoutes.patch('/profilePicture', ensureAuthenticated, uploadSingleFileMiddleware, uploadS3Middleware, profilePicture)
 
 export { userRoutes }

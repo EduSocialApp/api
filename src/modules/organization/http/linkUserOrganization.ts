@@ -3,7 +3,6 @@ import { NextFunction, Request, Response } from 'express'
 
 import { AppError } from '@/functions/AppError'
 
-import organization from '../organization.service'
 import organizationMember from '../member/organizationmember.service'
 import user from '../../user/user.service'
 
@@ -33,12 +32,8 @@ function hasPermissionToLink(user: Request['user'], role: RoleOrganizationEnum, 
  */
 export default async function linkUserOrganization(request: Request, response: Response, next: NextFunction) {
     try {
-        const { organizationId, userId, role } = request.body
-
-        const org = await organization.findById(organizationId)
-        if (!org) {
-            throw new AppError('Organization not found', 404)
-        }
+        const { id: organizationId } = request.params
+        const { userId, role } = request.body
 
         // Usuario logado na organizacao informada na requisicao
         const userLoggedOrgLink = await organizationMember.findByUserIdAndOrganizationId(request.user.id, organizationId)

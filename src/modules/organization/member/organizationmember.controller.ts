@@ -46,6 +46,37 @@ export default class OrganizationMemberController {
         })
     }
 
+    countByOrganizationId(organizationId: string) {
+        return this.prisma.count({
+            where: {
+                organizationId,
+            },
+        })
+    }
+
+    listByOrganizationId(organizationId: string, take: number = 10, skip: number = 0) {
+        return this.prisma.findMany({
+            where: {
+                organizationId,
+            },
+            select: {
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        pictureUrl: true,
+                    },
+                },
+                role: true,
+            },
+            orderBy: {
+                updatedAt: 'desc',
+            },
+            take,
+            skip,
+        })
+    }
+
     listByUserId(userId: string) {
         return this.prisma.findMany({
             where: {

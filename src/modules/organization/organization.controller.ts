@@ -69,6 +69,32 @@ export default class OrganizationController {
         })
     }
 
+    updateProfilePicture(id: string, url: string) {
+        return this.prisma.update({
+            where: {
+                id,
+            },
+            data: {
+                pictureUrl: url,
+            },
+        })
+    }
+
+    findByIdWithAddresses(id: string) {
+        return this.prisma.findUnique({
+            where: {
+                id,
+            },
+            include: {
+                addresses: {
+                    select: {
+                        address: true,
+                    },
+                },
+            },
+        })
+    }
+
     findByDocument(document: string) {
         return this.prisma.findFirst({
             where: {
