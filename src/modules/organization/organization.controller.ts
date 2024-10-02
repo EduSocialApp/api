@@ -161,6 +161,7 @@ export default class OrganizationController {
                         updatedAt: true,
                         user: {
                             select: {
+                                id: true,
                                 name: true,
                                 email: true,
                                 document: true,
