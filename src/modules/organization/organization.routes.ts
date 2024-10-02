@@ -22,14 +22,14 @@ import { uploadS3Middleware } from '@/middlewares/uploadS3'
 
 const orgRoutes = Router()
 
-// Basicas
 orgRoutes.get('/', organizationsList)
-orgRoutes.get('/:id', ensureOrgExists, findOrganizationById)
 orgRoutes.get('/my', ensureAuthenticated, myOrganizations)
-orgRoutes.get('/:id/totalMembers', ensureOrgExists, totalMembersInOrganization)
 orgRoutes.post('/create', ensureAuthenticated, ensureUserPrivileges([userScopes.organization.create]), createNewOrganization)
+orgRoutes.get('/waitingAnalysis', ensureAuthenticated, ensureUserPrivileges([], 'MODERATOR'), organizationsWaitingForAnalysis)
 
-// Gerenciamento
+orgRoutes.get('/:id', ensureOrgExists, findOrganizationById)
+orgRoutes.get('/:id/totalMembers', ensureOrgExists, totalMembersInOrganization)
+
 orgRoutes.post('/:id/link', ensureAuthenticated, ensureOrgExists, linkUserOrganization)
 orgRoutes.post('/:id/unlink', ensureAuthenticated, ensureOrgExists, unlinkUserOrganization)
 orgRoutes.patch(
@@ -42,8 +42,6 @@ orgRoutes.patch(
     updateProfilePicture
 )
 
-// Administrativas
-orgRoutes.get('/waitingAnalysis', ensureAuthenticated, ensureUserPrivileges([], 'MODERATOR'), organizationsWaitingForAnalysis)
 orgRoutes.post('/:id/approve', ensureAuthenticated, ensureOrgExists, ensureUserPrivileges([], 'MODERATOR'), approveOrganization)
 orgRoutes.post('/:id/reject', ensureAuthenticated, ensureOrgExists, ensureUserPrivileges([], 'MODERATOR'), rejectOrganization)
 
