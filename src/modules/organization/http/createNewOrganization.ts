@@ -12,12 +12,14 @@ import organizationAddress from '../../address/organization/organizationaddress.
  */
 export default async function createNewOrganization(request: Request, response: Response, next: NextFunction) {
     try {
-        let { name, email, document, phone, pictureUrl, address } = request.body as {
+        let { name, email, document, phone, pictureUrl, address, displayName, biography } = request.body as {
             name: string
             email: string
             document: string
             phone: string
             pictureUrl: string
+            displayName: string
+            biography: string
             address: {
                 street: string
                 number: string
@@ -31,12 +33,16 @@ export default async function createNewOrganization(request: Request, response: 
             }
         }
 
-        if (!phone || typeof phone !== 'string') {
+        if (!phone) {
             phone = ''
         }
 
-        if (typeof name !== 'string' || typeof document !== 'string' || typeof email !== 'string') {
-            throw new AppError('Invalid body')
+        if (!biography) {
+            biography = ''
+        }
+
+        if (!name || !email || !document || !displayName) {
+            throw new AppError('Required fields are missing')
         }
 
         if (!address) {
@@ -45,6 +51,14 @@ export default async function createNewOrganization(request: Request, response: 
 
         if (!address.ibgeCode) {
             throw new AppError('IBGE code is required')
+        }
+
+        if (displayName.length > 20) {
+            throw new AppError('Display name must have a maximum of 20 characters')
+        }
+
+        if (biography.length > 80) {
+            throw new AppError('Biography must have a maximum of 80 characters')
         }
 
         document = document.replace(/\D/g, '') // Remove caracteres não numéricos do documento
@@ -64,7 +78,7 @@ export default async function createNewOrganization(request: Request, response: 
             pictureUrl = gravatarProfilePictureUrl(email)
         }
 
-        const { id, createdAt } = await organization.create({ name, email, document, pictureUrl, phone })
+        const { id, createdAt } = await organization.create({ name, email, document, pictureUrl, phone, displayName, biography })
 
         // Criar endereço
         const { id: addressId } = await dbAddress.create(address)

@@ -14,6 +14,8 @@ datasource db {
 model User {
   id                   String               @id // UUID
   name                 String // Nome completo
+  displayName          String // Nome de exibição
+  biography            String // Biografia
   email                String               @unique // Email
   emailVerified        Boolean              @default(false) // Email verificado
   password             String // Senha criptografada
@@ -129,6 +131,8 @@ model SupervisedUser {
 model Organization {
   id                          String                @id // UUID
   name                        String // Nome
+  displayName                 String // Nome de exibição
+  biography                   String // Biografia
   email                       String // Email 
   phone                       String // Telefone
   verified                    Boolean               @default(false) // Organização verificada

@@ -13,23 +13,41 @@ export default async function createNewUser(request: Request, response: Response
     try {
         let {
             name,
+            displayName,
+            biography,
             password,
             email,
             birthday,
             pictureUrl,
             phone,
             permissions: { connectWithNeighbors, privacyPolicy, receiveEmails, receiveNotifications, termsOfUse },
-        } = request.body
+        } = request.body as {
+            name: string
+            displayName: string
+            biography: string
+            password: string
+            email: string
+            birthday: string
+            pictureUrl: string
+            phone: string
+            permissions: {
+                connectWithNeighbors: boolean
+                privacyPolicy: boolean
+                receiveEmails: boolean
+                receiveNotifications: boolean
+                termsOfUse: boolean
+            }
+        }
 
         if (!phone || typeof phone !== 'string') {
             phone = ''
         }
 
-        if (typeof name !== 'string' || typeof password !== 'string' || typeof email !== 'string' || typeof birthday !== 'string') {
-            throw new AppError('Invalid body')
+        if (!biography) {
+            biography = ''
         }
 
-        if (!name || !password || !email || !birthday) {
+        if (!name || !password || !email || !birthday || !displayName) {
             throw new AppError('Required fields are missing')
         }
 
@@ -39,6 +57,14 @@ export default async function createNewUser(request: Request, response: Response
 
         if (privacyPolicy !== true) {
             throw new AppError('You must accept the privacy policy')
+        }
+
+        if (displayName.length > 20) {
+            throw new AppError('Display name must have a maximum of 20 characters')
+        }
+
+        if (biography.length > 80) {
+            throw new AppError('Biography must have a maximum of 80 characters')
         }
 
         if (await user.findByEmail(email)) {
@@ -59,6 +85,8 @@ export default async function createNewUser(request: Request, response: Response
 
         const { id, createdAt } = await user.create({
             name,
+            displayName,
+            biography,
             password: hashPassword,
             email,
             birthday: new Date(birthday),

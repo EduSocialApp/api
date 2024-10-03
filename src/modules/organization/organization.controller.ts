@@ -5,11 +5,29 @@ import { prisma } from '../db'
 export default class OrganizationController {
     private prisma = prisma.organization
 
-    create({ name, email, document, pictureUrl, phone }: { name: string; email: string; document: string; pictureUrl: string; phone: string }) {
+    create({
+        name,
+        displayName,
+        biography,
+        email,
+        document,
+        pictureUrl,
+        phone,
+    }: {
+        name: string
+        displayName: string
+        biography: string
+        email: string
+        document: string
+        pictureUrl: string
+        phone: string
+    }) {
         return this.prisma.create({
             data: {
                 id: uuid(),
                 name,
+                displayName,
+                biography,
                 email,
                 document,
                 documentType: 'CNPJ',
@@ -23,12 +41,16 @@ export default class OrganizationController {
     update({
         id,
         name,
+        displayName,
+        biography,
         email,
         document,
         pictureUrl,
         phone,
     }: {
         id: string
+        displayName?: string
+        biography?: string
         name?: string
         email?: string
         document?: string
@@ -41,6 +63,8 @@ export default class OrganizationController {
             },
             data: {
                 name,
+                displayName,
+                biography,
                 email,
                 document,
                 pictureUrl,
@@ -97,6 +121,7 @@ export default class OrganizationController {
                             select: {
                                 id: true,
                                 name: true,
+                                displayName: true,
                                 email: true,
                                 pictureUrl: true,
                             },
@@ -141,7 +166,6 @@ export default class OrganizationController {
     list({ skip = 0, take = 10, name, email, document }: { skip?: number; take?: number; name?: string; email?: string; document?: string }) {
         return this.prisma.findMany({
             where: {
-                verified: true,
                 name: {
                     contains: name,
                 },
@@ -155,6 +179,7 @@ export default class OrganizationController {
             select: {
                 id: true,
                 name: true,
+                displayName: true,
                 email: true,
                 phone: true,
                 document: true,
@@ -162,6 +187,7 @@ export default class OrganizationController {
                 createdAt: true,
             },
             orderBy: {
+                verified: 'desc',
                 name: 'asc',
             },
             skip,
@@ -205,6 +231,52 @@ export default class OrganizationController {
             orderBy: {
                 createdAt: 'asc',
             },
+        })
+    }
+
+    findByQuery(query: string, cursor?: string, take: number = 10) {
+        return this.prisma.findMany({
+            cursor: cursor ? { id: cursor } : undefined,
+            skip: cursor ? 1 : 0,
+            take,
+            where: {
+                OR: [
+                    {
+                        name: {
+                            contains: query,
+                            mode: 'insensitive',
+                        },
+                    },
+                    {
+                        displayName: {
+                            contains: query,
+                            mode: 'insensitive',
+                        },
+                    },
+                    {
+                        email: {
+                            contains: query,
+                            mode: 'insensitive',
+                        },
+                    },
+                ],
+            },
+            select: {
+                id: true,
+                name: true,
+                displayName: true,
+                pictureUrl: true,
+                biography: true,
+                verified: true,
+            },
+            orderBy: [
+                {
+                    verified: 'desc',
+                },
+                {
+                    name: 'asc',
+                },
+            ],
         })
     }
 }

@@ -8,6 +8,8 @@ export default class UserController {
 
     create({
         name,
+        displayName,
+        biography,
         email,
         password,
         pictureUrl,
@@ -20,6 +22,8 @@ export default class UserController {
         termsOfUse,
     }: {
         name: string
+        displayName: string
+        biography: string
         email: string
         password: string
         pictureUrl: string
@@ -35,6 +39,8 @@ export default class UserController {
             data: {
                 id: uuid(),
                 name,
+                displayName,
+                biography,
                 email,
                 password,
                 document: '',
@@ -71,11 +77,6 @@ export default class UserController {
             },
             include: {
                 organizations: {
-                    where: {
-                        organization: {
-                            verified: true,
-                        },
-                    },
                     select: {
                         id: true,
                         role: true,
@@ -83,6 +84,7 @@ export default class UserController {
                             select: {
                                 id: true,
                                 name: true,
+                                displayName: true,
                                 pictureUrl: true,
                             },
                         },
@@ -121,6 +123,46 @@ export default class UserController {
             where: {
                 email,
                 password,
+            },
+        })
+    }
+
+    findByQuery(query: string, cursor?: string, take: number = 10) {
+        return this.prisma.findMany({
+            cursor: cursor ? { id: cursor } : undefined,
+            skip: cursor ? 1 : 0,
+            take,
+            where: {
+                OR: [
+                    {
+                        name: {
+                            contains: query,
+                            mode: 'insensitive',
+                        },
+                    },
+                    {
+                        displayName: {
+                            contains: query,
+                            mode: 'insensitive',
+                        },
+                    },
+                    {
+                        email: {
+                            contains: query,
+                            mode: 'insensitive',
+                        },
+                    },
+                ],
+            },
+            select: {
+                id: true,
+                name: true,
+                displayName: true,
+                pictureUrl: true,
+                biography: true,
+            },
+            orderBy: {
+                name: 'asc',
             },
         })
     }
