@@ -80,6 +80,33 @@ export default class OrganizationController {
         })
     }
 
+    getOwners(id: string) {
+        return this.prisma.findUnique({
+            where: {
+                id,
+            },
+            select: {
+                members: {
+                    where: {
+                        role: 'OWNER',
+                    },
+                    select: {
+                        id: true,
+                        updatedAt: true,
+                        user: {
+                            select: {
+                                id: true,
+                                name: true,
+                                email: true,
+                                pictureUrl: true,
+                            },
+                        },
+                    },
+                },
+            },
+        })
+    }
+
     findByIdWithAddresses(id: string) {
         return this.prisma.findUnique({
             where: {

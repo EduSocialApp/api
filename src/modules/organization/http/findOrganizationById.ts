@@ -9,6 +9,12 @@ export default async function findOrganizationById(request: Request, response: R
     try {
         const organizationData = await organization.findByIdWithAddresses(request.params.id)
 
+        if (request.user.role === 'ADMIN' || request.user.role === 'MODERATOR') {
+            const owners = await organization.getOwners(request.params.id)
+
+            return response.status(200).json({ ...organizationData, owners: owners?.members || [] })
+        }
+
         response.status(200).json(organizationData)
     } catch (e) {
         next(e)

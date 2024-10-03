@@ -27,8 +27,8 @@ orgRoutes.get('/my', ensureAuthenticated, myOrganizations)
 orgRoutes.post('/create', ensureAuthenticated, ensureUserPrivileges([userScopes.organization.create]), createNewOrganization)
 orgRoutes.get('/waitingAnalysis', ensureAuthenticated, ensureUserPrivileges([], 'MODERATOR'), organizationsWaitingForAnalysis)
 
-orgRoutes.get('/:id', ensureOrgExists, findOrganizationById)
-orgRoutes.get('/:id/totalMembers', ensureOrgExists, totalMembersInOrganization)
+orgRoutes.get('/:id', ensureAuthenticated, ensureOrgExists, findOrganizationById)
+orgRoutes.get('/:id/totalMembers', ensureAuthenticated, ensureOrgExists, totalMembersInOrganization)
 
 orgRoutes.post('/:id/link', ensureAuthenticated, ensureOrgExists, linkUserOrganization)
 orgRoutes.post('/:id/unlink', ensureAuthenticated, ensureOrgExists, unlinkUserOrganization)
