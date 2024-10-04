@@ -46,6 +46,7 @@ model User {
   addresses            UserAddress[] // Endereços do usuário
   reports              UserReport[]         @relation("ReportedUser") // Comunicados feitos para o usuário
   reportsCreated       UserReport[]         @relation("ReportAuthor") // Comunicados feitos pelo usuário
+  sharedLinks          ShareLink[] // Links compartilhados
 }
 
 model UserReport {
@@ -202,6 +203,19 @@ model Address {
   organizationEventsAddress OrganizationEvent[] // Endereços dos eventos
 }
 
+model ShareLink {
+  id        String            @id // UUID
+  userId    String // ID do usuário que criou o link
+  data      String // URL do link
+  type      ShareLinkTypeEnum // Tipo do link
+  countUsed Int               @default(0) // Número de vezes que o link foi usado
+  maxUses   Int               @default(0) // Número máximo de vezes que o link pode ser usado
+  expiresAt DateTime? // Data de expiração
+  createdAt DateTime          @default(now()) // Data de criação
+  updatedAt DateTime          @default(now()) @updatedAt // Data de atualização
+  user      User              @relation(fields: [userId], references: [id]) // Usuário
+}
+
 model Media {
   id          String      @id // UUID
   description String // Descrição da mídia
@@ -244,4 +258,10 @@ enum RoleOrganizationEnum {
   OWNER
   MODERATOR
   USER
+}
+
+// Tipos de ShareLink
+enum ShareLinkTypeEnum {
+  USER
+  ORGANIZATION
 }
