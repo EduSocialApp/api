@@ -54,7 +54,7 @@ export default class OrganizationMemberController {
         })
     }
 
-    listByOrganizationId(organizationId: string, take: number = 10, skip: number = 0) {
+    listByOrganizationId(organizationId: string, cursor?: string, take: number = 10) {
         return this.prisma.findMany({
             where: {
                 organizationId,
@@ -67,13 +67,15 @@ export default class OrganizationMemberController {
                         pictureUrl: true,
                     },
                 },
+                id: true,
                 role: true,
             },
             orderBy: {
                 updatedAt: 'desc',
             },
             take,
-            skip,
+            skip: cursor ? 1 : 0,
+            cursor: cursor ? { id: cursor } : undefined,
         })
     }
 

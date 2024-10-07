@@ -23,16 +23,20 @@ async function hasPermissionToListOrganizationMembers(user: Request['user'], org
 export default async function organizationMembers(request: Request, response: Response, next: NextFunction) {
     try {
         const { id } = request.params
-        const skip = Number(request.headers['skip']) || 0
+        let { lastOrganizationMemberId } = request.query as { lastOrganizationMemberId: string }
 
-        // hasPermissionToLink
         if (!(await hasPermissionToListOrganizationMembers(request.user, id))) {
             throw new AppError('Permission denied', 403)
         }
 
-        const list = await organizationMemberService.listByOrganizationId(id, 20, skip)
+        const list = await organizationMemberService.listByOrganizationId(id, lastOrganizationMemberId, 20)
 
-        response.status(200).json(list)
+        lastOrganizationMemberId = list.length > 0 ? list[list.length - 1]?.id : lastOrganizationMemberId
+
+        response
+            .status(200)
+            .setHeader('last-organizationmember-id', lastOrganizationMemberId || '')
+            .json(list)
     } catch (e) {
         next(e)
     }

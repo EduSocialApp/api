@@ -19,6 +19,8 @@ import updateProfilePicture from './http/updateProfilePicture'
 import { ensureOrgPrivileges } from '@/middlewares/ensureOrgPrivileges'
 import { uploadSingleFileMiddleware } from '@/middlewares/multer'
 import { uploadS3Middleware } from '@/middlewares/uploadS3'
+import organizationMembers from './http/organizationMembers'
+import userPermissionsInOrganization from './http/userPermissionsInOrganization'
 
 const orgRoutes = Router()
 
@@ -29,6 +31,8 @@ orgRoutes.get('/waitingAnalysis', ensureAuthenticated, ensureUserPrivileges([], 
 
 orgRoutes.get('/:id', ensureAuthenticated, ensureOrgExists, findOrganizationById)
 orgRoutes.get('/:id/totalMembers', ensureAuthenticated, ensureOrgExists, totalMembersInOrganization)
+orgRoutes.get('/:id/members', ensureAuthenticated, ensureOrgExists, organizationMembers)
+orgRoutes.get('/:id/role', ensureAuthenticated, ensureOrgExists, userPermissionsInOrganization)
 
 orgRoutes.post('/:id/link', ensureAuthenticated, ensureOrgExists, linkUserOrganization)
 orgRoutes.post('/:id/unlink', ensureAuthenticated, ensureOrgExists, unlinkUserOrganization)
