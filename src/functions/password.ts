@@ -5,5 +5,5 @@ export function passwordToHash(password: string): Promise<string> {
 }
 
 export function validatePasswordHash(password: string, hash: string): Promise<boolean> {
-    return bcrypt.compare(password, hash)      
+    return bcrypt.compare(password, hash)
 }

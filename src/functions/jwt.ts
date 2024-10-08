@@ -2,7 +2,7 @@ import { sign as signToken, SignOptions, verify as verifyToken } from 'jsonwebto
 
 import uuid from './uuid'
 
-const secret = process.env.SECRET || 'segredo-muito-secreto'
+const secret = process.env.EDUSOCIAL_SECRET || 'segredo-muito-secreto'
 
 export function createAccessToken({ options, payload }: { payload?: object; options?: SignOptions }): { id: string; token: string } {
     const id = uuid()

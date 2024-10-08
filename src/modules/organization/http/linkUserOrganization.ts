@@ -1,10 +1,11 @@
-import { OrganizationMember, RoleOrganizationEnum } from '@prisma/client'
+import { RoleOrganizationEnum } from '@prisma/client'
 import { NextFunction, Request, Response } from 'express'
 
 import { AppError } from '@/functions/AppError'
 
 import organizationMember from '../member/organizationmember.service'
 import user from '../../user/user.service'
+import { sendNotificationForUserId } from '@/functions/sendNotification'
 
 /**
  * Verifica se o usuário logado tem permissão para vincular um membro com determinada funcao a uma organização
@@ -52,6 +53,7 @@ export default async function linkUserOrganization(request: Request, response: R
         if (orgMember) {
             await organizationMember.updateMemberRole(userId, organizationId, role)
         } else {
+            sendNotificationForUserId(userId, 'Nova Organização', 'Você foi convidado para participar de uma nova organização')
             orgMember = await organizationMember.create({ organizationId, role, userId })
         }
 

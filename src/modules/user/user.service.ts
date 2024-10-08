@@ -8,27 +8,29 @@ import session from '@/modules/session/session.service'
 import UserController from './user.controller'
 
 export class User extends UserController {
-
-    async authenticate(email: string, password: string, identifier?: string): Promise<{ accessToken: string, refreshToken: string }> {
+    async authenticate(email: string, password: string, identifier?: string, ip?: string, notificationToken?: string) {
         if (!password || !email) {
             throw new AppError('Email and password are required')
         }
 
         const user = await this.findByEmail(email)
 
-        if (user && await validatePasswordHash(password, user.password)) {
+        if (user && (await validatePasswordHash(password, user.password))) {
+            const expirationDate = new Date(new Date().getTime() + 1000 * 60 * 60 * 3) // Adiciona 3 horas a partir de agora
+
             const { id, token } = createAccessToken({
                 options: {
                     subject: user.id,
-                    expiresIn: '1h'
-                }
+                    expiresIn: '3h',
+                },
             })
 
-            const refreshToken = await session.create(user.id, identifier)
+            const refreshToken = await session.create(user.id, id, identifier, ip, notificationToken)
 
             return {
                 accessToken: token,
-                refreshToken
+                refreshToken,
+                expirationDate,
             }
         }
 

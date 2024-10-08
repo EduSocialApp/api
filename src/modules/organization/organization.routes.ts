@@ -21,6 +21,7 @@ import { uploadSingleFileMiddleware } from '@/middlewares/multer'
 import { uploadS3Middleware } from '@/middlewares/uploadS3'
 import organizationMembers from './http/organizationMembers'
 import userPermissionsInOrganization from './http/userPermissionsInOrganization'
+import approveUserLinkOrganization from './http/approveUserLinkOrganization'
 
 const orgRoutes = Router()
 
@@ -35,7 +36,10 @@ orgRoutes.get('/:id/members', ensureAuthenticated, ensureOrgExists, organization
 orgRoutes.get('/:id/role', ensureAuthenticated, ensureOrgExists, userPermissionsInOrganization)
 
 orgRoutes.post('/:id/link', ensureAuthenticated, ensureOrgExists, linkUserOrganization)
-orgRoutes.post('/:id/unlink', ensureAuthenticated, ensureOrgExists, unlinkUserOrganization)
+
+orgRoutes.post('/:organizationMemberId/approve', ensureAuthenticated, approveUserLinkOrganization)
+orgRoutes.post('/:organizationMemberId/unlink', ensureAuthenticated, unlinkUserOrganization)
+
 orgRoutes.patch(
     '/:id/profilePicture',
     ensureAuthenticated,

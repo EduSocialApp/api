@@ -10,10 +10,12 @@ export default class OrganizationMemberController {
         organizationId,
         role = RoleOrganizationEnum.USER,
         userId,
+        invited = true,
     }: {
         userId: string
         organizationId: string
         role?: RoleOrganizationEnum
+        invited?: boolean
     }) {
         return this.prisma.create({
             data: {
@@ -21,6 +23,26 @@ export default class OrganizationMemberController {
                 userId,
                 organizationId,
                 role,
+                invited,
+            },
+        })
+    }
+
+    updateInvitedStatus(id: string, invited: boolean) {
+        return this.prisma.update({
+            where: {
+                id,
+            },
+            data: {
+                invited,
+            },
+        })
+    }
+
+    findById(id: string) {
+        return this.prisma.findUnique({
+            where: {
+                id,
             },
         })
     }
@@ -58,6 +80,7 @@ export default class OrganizationMemberController {
         return this.prisma.findMany({
             where: {
                 organizationId,
+                invited: true,
             },
             select: {
                 user: {

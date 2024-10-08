@@ -1,10 +1,13 @@
 import { AppError } from '@/functions/AppError'
 import { NextFunction, Request, Response } from 'express'
 import { verifyAcessToken } from '@/functions/jwt'
+
 import dbUser from '@/modules/user/user.service'
+import dbSession from '@/modules/session/session.service'
 
 interface Payload {
     sub: string
+    jti: string
 }
 
 /**
@@ -21,7 +24,12 @@ export async function ensureAuthenticated(request: Request, response: Response, 
         // Bearer token
         const [, token] = authHeader.split(' ')
 
-        const { sub: userId } = verifyAcessToken(token) as Payload
+        // Verificar se o token é valido e recupera informacoes do payload
+        const { sub: userId, jti } = verifyAcessToken(token) as Payload
+
+        // Verificar se existe uma sessao ativa para este token
+        const session = await dbSession.findByAccessTokenHash(jti)
+        if (!session) throw new AppError('Invalid token', 401)
 
         const user = await dbUser.findById(userId)
 
@@ -33,6 +41,8 @@ export async function ensureAuthenticated(request: Request, response: Response, 
             id: userId,
             scopes: user.scopes,
             role: user.role,
+            sessionId: session.id,
+            notificationToken: user.receiveNotifications ? session.notificationToken : null,
         }
 
         next()

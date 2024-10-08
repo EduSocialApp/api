@@ -177,6 +177,7 @@ model OrganizationMember {
   id             String               @id // UUID
   userId         String // ID do usuário
   organizationId String // ID da organização
+  invited        Boolean              @default(false) // Usuário foi convidado
   role           RoleOrganizationEnum // Papel do usuário na organização
   createdAt      DateTime             @default(now()) // Data de criação
   updatedAt      DateTime             @default(now()) @updatedAt // Data de atualização
@@ -226,14 +227,16 @@ model Media {
 }
 
 model Session {
-  id         String   @id // UUID (refresh token)
-  userId     String // ID do usuário
-  content    String // Conteúdo da sessão
-  identifier String // Identificador da sessão
-  ip         String // IP do usuário
-  createdAt  DateTime @default(now()) // Data de criação
-  updatedAt  DateTime @default(now()) @updatedAt // Data de atualização
-  user       User     @relation(fields: [userId], references: [id]) // Usuário
+  id                String   @id // UUID (refresh token)
+  userId            String // ID do usuário
+  accessTokenHash   String   @default("") // Hash do access token
+  content           String // Conteúdo da sessão
+  identifier        String // Identificador da sessão
+  ip                String // IP do usuário
+  notificationToken String? // Token de notificação
+  createdAt         DateTime @default(now()) // Data de criação
+  updatedAt         DateTime @default(now()) @updatedAt // Data de atualização
+  user              User     @relation(fields: [userId], references: [id]) // Usuário
 }
 
 // Documentos de identificação

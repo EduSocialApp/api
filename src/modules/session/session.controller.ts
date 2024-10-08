@@ -5,28 +5,48 @@ import { prisma } from '../db'
 export default class SessionController {
     private prisma = prisma.session
 
-    async update({ id, content }: { id: string, content: string }) {
+    async update({
+        id,
+        content,
+        ip,
+        accessTokenHash,
+        identifier,
+        notificationToken,
+    }: {
+        id: string
+        content: string
+        ip: string
+        accessTokenHash: string
+        identifier: string
+        notificationToken: string
+    }) {
         await this.prisma.update({
             where: {
-                id
+                id,
             },
             data: {
-                content
-            }
+                content,
+                ip,
+                accessTokenHash,
+                identifier,
+                notificationToken,
+            },
         })
     }
 
-    async create(userId: string, identifier: string = 'UNKNOW', ip: string = '') {
+    async create(userId: string, accessTokenHash = '', identifier: string = 'UNKNOW', ip: string = '', notificationToken = '') {
         const id = uuid()
 
         await this.prisma.create({
             data: {
                 id,
+                accessTokenHash,
                 userId,
                 content: '',
                 identifier,
-                ip
-            }
+                notificationToken,
+                ip,
+            },
         })
 
         return id
@@ -35,16 +55,24 @@ export default class SessionController {
     async delete(refreshToken: string) {
         await this.prisma.delete({
             where: {
-                id: refreshToken
-            }
+                id: refreshToken,
+            },
         })
     }
 
     findById(refreshToken: string) {
         return this.prisma.findUnique({
             where: {
-                id: refreshToken
-            }
+                id: refreshToken,
+            },
+        })
+    }
+
+    findByAccessTokenHash(accessTokenHash: string) {
+        return this.prisma.findFirst({
+            where: {
+                accessTokenHash,
+            },
         })
     }
 }

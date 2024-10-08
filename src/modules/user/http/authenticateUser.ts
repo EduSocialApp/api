@@ -9,13 +9,19 @@ import user from '../user.service'
  */
 export default async function authenticateUser(request: Request, response: Response, next: NextFunction) {
     try {
-        const { email, password } = request.body
+        const { email, password, notificationToken, deviceName } = request.body
 
         if (!email || !password) {
             throw new AppError('Email and password are required')
         }
 
-        const auth = await user.authenticate(email, password, request.headers['user-agent'] || 'unknown')
+        const auth = await user.authenticate(
+            email,
+            password,
+            deviceName || request.headers['user-agent'] || 'unknown',
+            (request.ip || request.headers['x-forwarded-for']) as string,
+            notificationToken
+        )
 
         return response.status(200).json(auth)
     } catch (e) {

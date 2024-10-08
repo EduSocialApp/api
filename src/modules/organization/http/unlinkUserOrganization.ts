@@ -9,8 +9,17 @@ import organizationMember from '../member/organizationmember.service'
 /**
  * Verifica se o usuário logado tem permissão para desvincular um membro com determinada funcao a uma organização
  */
-function hasPermissionToUnlink(user: Request['user'], orgMemberRole: RoleOrganizationEnum, orgMemberLoggedRole?: RoleOrganizationEnum): boolean {
+function hasPermissionToUnlink(
+    user: Request['user'],
+    orgMemberId: string,
+    orgMemberRole: RoleOrganizationEnum,
+    orgMemberLoggedRole?: RoleOrganizationEnum
+): boolean {
     const { role: userRole } = user
+
+    if (user.id === orgMemberId) {
+        return true // O usuário pode desvincular ele mesmo
+    }
 
     if (orgMemberRole === 'OWNER') {
         return userRole === 'ADMIN' || userRole === 'MODERATOR'
@@ -32,22 +41,22 @@ function hasPermissionToUnlink(user: Request['user'], orgMemberRole: RoleOrganiz
  */
 export default async function unlinkUserOrganization(request: Request, response: Response, next: NextFunction) {
     try {
-        const { id: organizationId } = request.params
-        const { userId } = request.body
+        const { organizationMemberId } = request.params
 
-        // Usuario logado na organizacao informada na requisicao
-        const userLoggedOrgLink = await organizationMember.findByUserIdAndOrganizationId(request.user.id, organizationId)
+        const orgMember = await organizationMember.findById(organizationMemberId)
 
-        const orgMember = await organizationMember.findByUserIdAndOrganizationId(userId, organizationId)
         if (!orgMember) {
-            throw new AppError('User is not linked to this organization', 404)
+            throw new AppError('Link not exists', 404)
         }
 
-        if (!hasPermissionToUnlink(request.user, orgMember.role, userLoggedOrgLink?.role)) {
+        // Usuario logado na organizacao informada na requisicao
+        const userLoggedOrgLink = await organizationMember.findByUserIdAndOrganizationId(request.user.id, orgMember.organizationId)
+
+        if (!hasPermissionToUnlink(request.user, orgMember.id, orgMember.role, userLoggedOrgLink?.role)) {
             throw new AppError('Permission denied', 403)
         }
 
-        await organizationMember.deleteLink(userId, organizationId)
+        await organizationMember.deleteLink(orgMember.userId, orgMember.organizationId)
 
         response.status(200).send({ status: 'success' })
     } catch (e) {

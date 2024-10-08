@@ -163,18 +163,23 @@ export default class OrganizationController {
         })
     }
 
-    list({ skip = 0, take = 10, name, email, document }: { skip?: number; take?: number; name?: string; email?: string; document?: string }) {
+    list({ skip = 0, take = 10, name, email }: { skip?: number; take?: number; name?: string; email?: string }) {
         return this.prisma.findMany({
             where: {
-                name: {
-                    contains: name,
-                },
-                email: {
-                    contains: email,
-                },
-                document: {
-                    contains: document,
-                },
+                OR: [
+                    {
+                        name: {
+                            contains: name,
+                            mode: 'insensitive',
+                        },
+                    },
+                    {
+                        email: {
+                            contains: email,
+                            mode: 'insensitive',
+                        },
+                    },
+                ],
             },
             select: {
                 id: true,
@@ -186,10 +191,14 @@ export default class OrganizationController {
                 pictureUrl: true,
                 createdAt: true,
             },
-            orderBy: {
-                verified: 'desc',
-                name: 'asc',
-            },
+            orderBy: [
+                {
+                    verified: 'desc',
+                },
+                {
+                    name: 'asc',
+                },
+            ],
             skip,
             take,
         })

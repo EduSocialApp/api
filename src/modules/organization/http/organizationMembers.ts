@@ -14,7 +14,9 @@ async function hasPermissionToListOrganizationMembers(user: Request['user'], org
     const orgMember = await organizationMemberService.findByUserIdAndOrganizationId(user.id, orgId)
 
     // Se não for membro, não pode listar membros
-    if (!orgMember) return false
+    if (orgMember) return true
+
+    return false
 }
 
 /**

@@ -25,7 +25,7 @@ export class Session extends SessionController {
         return false
     }
 
-    async renew(refreshToken: string, identifier: string): Promise<string> {
+    async renew(refreshToken: string, identifier: string = '', ip: string = '', notificationToken: string = '') {
         const session = await super.findById(refreshToken)
 
         if (!session) {
@@ -36,26 +36,32 @@ export class Session extends SessionController {
         const limit = addDays(session.createdAt, this.daysLimitSession)
 
         // Verifica se a sessao ja expirou ou se o identificador nao bate com quem gerou
-        if (limit < new Date() || session.identifier !== identifier) {
+        if (limit < new Date()) {
             await super.delete(refreshToken) // Delete the session
             throw new AppError('Refresh token expired', 401)
         }
 
+        const expirationDate = new Date(new Date().getTime() + 1000 * 60 * 60 * 3) // Adiciona 3 horas a partir de agora
+
         // Cria accessToken
-        const { token } = createAccessToken({
+        const { id: accessTokenHash, token: accessToken } = createAccessToken({
             options: {
                 subject: session.userId,
-                expiresIn: '1h'
-            }
+                expiresIn: '3h',
+            },
         })
 
         // Atualiza a sessao com o novo token
         await super.update({
             id: session.id,
-            content: session.content
+            content: session.content,
+            ip,
+            accessTokenHash,
+            identifier,
+            notificationToken,
         })
 
-        return token
+        return { accessToken, expirationDate }
     }
 }
 

@@ -7,14 +7,20 @@ import session from '../session.service'
 // precisa terminar a funcao de renovacao de token
 export default async function renewToken(request: Request, response: Response, next: NextFunction) {
     try {
-        const { refreshToken } = request.body
+        const { refreshToken, notificationToken, deviceName } = request.body
 
         if (!refreshToken || typeof refreshToken !== 'string') {
             throw new AppError('Refresh token is required')
         }
 
-        const accessToken = await session.renew(refreshToken, request.headers['user-agent'] || 'unknown')
-        return response.status(200).json({ accessToken })
+        const { accessToken, expirationDate } = await session.renew(
+            refreshToken,
+            deviceName || request.headers['user-agent'] || 'unknown',
+            (request.ip || request.headers['x-forwarded-for']) as string,
+            notificationToken
+        )
+
+        return response.status(200).json({ accessToken, expirationDate })
     } catch (e) {
         next(e)
     }
