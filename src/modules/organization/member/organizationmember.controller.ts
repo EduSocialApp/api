@@ -72,6 +72,7 @@ export default class OrganizationMemberController {
         return this.prisma.count({
             where: {
                 organizationId,
+                invited: false,
             },
         })
     }
@@ -80,13 +81,14 @@ export default class OrganizationMemberController {
         return this.prisma.findMany({
             where: {
                 organizationId,
-                invited: true,
+                invited: false,
             },
             select: {
                 user: {
                     select: {
                         id: true,
                         name: true,
+                        displayName: true,
                         pictureUrl: true,
                     },
                 },
@@ -111,6 +113,7 @@ export default class OrganizationMemberController {
                 organization: true,
                 createdAt: true,
                 role: true,
+                id: true,
             },
             orderBy: {
                 createdAt: 'desc',

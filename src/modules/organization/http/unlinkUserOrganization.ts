@@ -11,13 +11,13 @@ import organizationMember from '../member/organizationmember.service'
  */
 function hasPermissionToUnlink(
     user: Request['user'],
-    orgMemberId: string,
+    orgMemberUserId: string,
     orgMemberRole: RoleOrganizationEnum,
     orgMemberLoggedRole?: RoleOrganizationEnum
 ): boolean {
     const { role: userRole } = user
 
-    if (user.id === orgMemberId) {
+    if (user.id === orgMemberUserId) {
         return true // O usuário pode desvincular ele mesmo
     }
 
@@ -52,7 +52,7 @@ export default async function unlinkUserOrganization(request: Request, response:
         // Usuario logado na organizacao informada na requisicao
         const userLoggedOrgLink = await organizationMember.findByUserIdAndOrganizationId(request.user.id, orgMember.organizationId)
 
-        if (!hasPermissionToUnlink(request.user, orgMember.id, orgMember.role, userLoggedOrgLink?.role)) {
+        if (!hasPermissionToUnlink(request.user, orgMember.userId, orgMember.role, userLoggedOrgLink?.role)) {
             throw new AppError('Permission denied', 403)
         }
 

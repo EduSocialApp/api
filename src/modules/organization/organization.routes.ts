@@ -11,7 +11,6 @@ import { ensureUserPrivileges } from '@/middlewares/ensureUserPrivileges'
 import { userScopes } from '../user/user.scopes'
 import organizationsWaitingForAnalysis from './http/organizationsWatingForAnalyse'
 import organizationsList from './http/organizationsList'
-import myOrganizations from './http/myOrganizations'
 import totalMembersInOrganization from './http/totalMembersInOrganization'
 import { ensureOrgExists } from '@/middlewares/ensureOrgExists'
 import findOrganizationById from './http/findOrganizationById'
@@ -22,11 +21,12 @@ import { uploadS3Middleware } from '@/middlewares/uploadS3'
 import organizationMembers from './http/organizationMembers'
 import userPermissionsInOrganization from './http/userPermissionsInOrganization'
 import approveUserLinkOrganization from './http/approveUserLinkOrganization'
+import userOrganizations from './http/userOrganizations'
 
 const orgRoutes = Router()
 
 orgRoutes.get('/', organizationsList)
-orgRoutes.get('/my', ensureAuthenticated, myOrganizations)
+orgRoutes.get('/user/:id', ensureAuthenticated, userOrganizations)
 orgRoutes.post('/create', ensureAuthenticated, ensureUserPrivileges([userScopes.organization.create]), createNewOrganization)
 orgRoutes.get('/waitingAnalysis', ensureAuthenticated, ensureUserPrivileges([], 'MODERATOR'), organizationsWaitingForAnalysis)
 
@@ -37,8 +37,8 @@ orgRoutes.get('/:id/role', ensureAuthenticated, ensureOrgExists, userPermissions
 
 orgRoutes.post('/:id/link', ensureAuthenticated, ensureOrgExists, linkUserOrganization)
 
-orgRoutes.post('/:organizationMemberId/approve', ensureAuthenticated, approveUserLinkOrganization)
-orgRoutes.post('/:organizationMemberId/unlink', ensureAuthenticated, unlinkUserOrganization)
+orgRoutes.post('/member/:organizationMemberId/approve', ensureAuthenticated, approveUserLinkOrganization)
+orgRoutes.post('/member/:organizationMemberId/unlink', ensureAuthenticated, unlinkUserOrganization)
 
 orgRoutes.patch(
     '/:id/profilePicture',

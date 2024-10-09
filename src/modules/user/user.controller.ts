@@ -59,6 +59,39 @@ export default class UserController {
         })
     }
 
+    pendingOrganizationInvitationsByUserId(userId: string) {
+        return this.prisma.findUnique({
+            where: {
+                id: userId,
+            },
+            select: {
+                id: true,
+                organizations: {
+                    where: {
+                        invited: true,
+                    },
+                    select: {
+                        id: true,
+                        role: true,
+                        organization: {
+                            select: {
+                                id: true,
+                                displayName: true,
+                                verified: true,
+                                pictureUrl: true,
+                                name: true,
+                                biography: true,
+                            },
+                        },
+                    },
+                    orderBy: {
+                        updatedAt: 'desc',
+                    },
+                },
+            },
+        })
+    }
+
     ableToInvitedToOrganization(query: string, organizationId: string = '', cursor?: string, take: number = 10) {
         return this.prisma.findMany({
             cursor: cursor ? { id: cursor } : undefined,

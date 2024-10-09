@@ -44,8 +44,12 @@ export function sendNotificationByNotificationToken(token: string, title: string
 }
 
 export function sendNotificationByExpo(expoTokens: string[], title: string, message: string, data: Object = {}) {
+    const tokens = expoTokens.filter((token) => token) // Remove tokens vazios
+
+    if (tokens.length === 0) return
+
     return axios.post('https://exp.host/--/api/v2/push/send', {
-        to: expoTokens,
+        to: tokens,
         title,
         body: message,
         data,

@@ -24,7 +24,7 @@ export default async function approveUserLinkOrganization(request: Request, resp
             throw new AppError('User already linked to organization', 400)
         }
 
-        await dbOrganizationMember.updateInvitedStatus(organizationMemberId, true)
+        await dbOrganizationMember.updateInvitedStatus(organizationMemberId, false)
 
         response.status(200).json({ message: 'User linked to organization' })
     } catch (e) {
