@@ -18,18 +18,19 @@ export default async function getUserById(request: Request, response: Response, 
             throw new AppError('User not found', 404)
         }
 
-        // Remove informações sensíveis
-        const userFiltred = omitProperties(user, ['password'])
-
         if (request.user.id === user.id || request.user.role === 'ADMIN' || request.user.role === 'MODERATOR') {
+            const userFiltred = omitProperties(user, ['password']) // Remove informações sensíveis
             return response.status(200).json(userFiltred)
         }
 
         response.status(200).json({
-            id: userFiltred.id,
-            name: userFiltred.name,
-            pictureUrl: userFiltred.pictureUrl,
-            organizations: userFiltred.organizations,
+            id: user.id,
+            name: user.name,
+            role: user.role,
+            biography: user.biography,
+            displayName: user.displayName,
+            pictureUrl: user.pictureUrl,
+            organizations: [],
         })
     } catch (e) {
         next(e)
