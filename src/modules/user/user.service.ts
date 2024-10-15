@@ -36,6 +36,11 @@ export class User extends UserController {
 
         throw new AppError('Invalid email or password', 401)
     }
+
+    async isValid(id: string) {
+        const user = await this.findById(id)
+        return !!user
+    }
 }
 
 export default new User()

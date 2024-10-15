@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 
 import { AppError } from '@/functions/AppError'
 
-import user from '../user.service'
+import user from '../../user.service'
 
 /**
  * Autentica usuario com email e senha

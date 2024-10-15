@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 
-import user from '../../user/user.service'
+import user from '../../user.service'
 
 /**
  * Organizações pendentes

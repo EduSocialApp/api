@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 
 import { AppError } from '@/functions/AppError'
 
-import session from '../session.service'
+import session from '../../../session/session.service'
 
 // precisa terminar a funcao de renovacao de token
 export default async function renewToken(request: Request, response: Response, next: NextFunction) {

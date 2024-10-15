@@ -15,4 +15,10 @@ export default class ShareLinkController {
             },
         })
     }
+
+    findById(id: string) {
+        return this.prisma.findUnique({
+            where: { id },
+        })
+    }
 }

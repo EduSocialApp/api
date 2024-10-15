@@ -206,7 +206,7 @@ model Address {
 
 model ShareLink {
   id        String            @id // UUID
-  userId    String // ID do usuário que criou o link
+  userId    String? // ID do usuário que criou o link
   data      String // URL do link
   type      ShareLinkTypeEnum // Tipo do link
   countUsed Int               @default(0) // Número de vezes que o link foi usado
@@ -214,7 +214,7 @@ model ShareLink {
   expiresAt DateTime? // Data de expiração
   createdAt DateTime          @default(now()) // Data de criação
   updatedAt DateTime          @default(now()) @updatedAt // Data de atualização
-  user      User              @relation(fields: [userId], references: [id]) // Usuário
+  user      User?             @relation(fields: [userId], references: [id]) // Usuário
 }
 
 model Media {

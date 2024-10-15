@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import dbUser from '../user.service'
+import dbUser from '../../user.service'
 import { AppError } from '@/functions/AppError'
 import omitProperties from 'lodash/omit'
 
