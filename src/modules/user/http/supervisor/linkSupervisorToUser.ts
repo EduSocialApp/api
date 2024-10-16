@@ -51,9 +51,9 @@ export default async function linkSupervisorToUser(request: Request, response: R
             throw new AppError('User not found', 404)
         }
 
-        // Verifica se o usuario logado ja tem vinculo como supervisor do usuario
-        if (dbSupervisedUser.userLinkedToSupervisor(request.user.id, userId)) {
-            throw new AppError('User already linked to supervisor', 400)
+        // Verifica se usuarios ja possuem vinculo
+        if (await dbSupervisedUser.usersHaveLink(request.user.id, userId)) {
+            throw new AppError('Users already linked', 400)
         }
 
         // Cria vinculo entre supervisor e usuario
@@ -61,6 +61,11 @@ export default async function linkSupervisorToUser(request: Request, response: R
 
         // Notifica usuario que ele foi vinculado a um supervisor
         sendNotificationToUserId(userId, 'Vinculo com supervisor', 'Você foi vinculado a um supervisor')
+
+        if (sharedCode) {
+            // Incrementa contador de uso do codigo compartilhado
+            await dbShareLink.incrementUsedCount(sharedCode)
+        }
 
         response.status(201).send({
             message: 'User linked to supervisor',

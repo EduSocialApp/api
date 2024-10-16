@@ -153,6 +153,19 @@ export default class UserController {
         })
     }
 
+    updateBasicInformations(id: string, { name, biography, displayName }: { name: string; displayName: string; biography: string }) {
+        return this.prisma.update({
+            where: {
+                id,
+            },
+            data: {
+                name,
+                biography,
+                displayName,
+            },
+        })
+    }
+
     findByIdDetailed(id: string) {
         return this.prisma.findUnique({
             where: {
@@ -169,6 +182,36 @@ export default class UserController {
                                 name: true,
                                 displayName: true,
                                 pictureUrl: true,
+                            },
+                        },
+                    },
+                },
+                supervisedUsers: {
+                    select: {
+                        supervisorUserId: true,
+                        updatedAt: true,
+                        supervisorUser: {
+                            select: {
+                                id: true,
+                                name: true,
+                                displayName: true,
+                                pictureUrl: true,
+                                biography: true,
+                            },
+                        },
+                    },
+                },
+                supervisorUsers: {
+                    select: {
+                        supervisedUserId: true,
+                        updatedAt: true,
+                        supervisedUser: {
+                            select: {
+                                id: true,
+                                name: true,
+                                displayName: true,
+                                pictureUrl: true,
+                                biography: true,
                             },
                         },
                     },

@@ -4,8 +4,13 @@ export class SupervisedUser extends SupervisedUserController {
     /**
      *  Verifica se um usuário está vinculado a um supervisor
      */
-    userLinkedToSupervisor(userId: string, supervisorId: string) {
-        const link = this.findSupervisedUserBySupervisorIdAndSupervisedId(supervisorId, userId)
+    async userLinkedToSupervisor(supervisorId: string, userId: string) {
+        const link = await this.findSupervisedUserBySupervisorIdAndSupervisedId(supervisorId, userId)
+        return !!link
+    }
+
+    async usersHaveLink(userA: string, userB: string) {
+        const link = await this.findLinkUsers(userA, userB)
         return !!link
     }
 }

@@ -51,20 +51,14 @@ export default async function createNewUser(request: Request, response: Response
             throw new AppError('Required fields are missing')
         }
 
+        user.checkBasicInformationsUser(name, displayName, biography)
+
         if (termsOfUse !== true) {
             throw new AppError('You must accept the terms of use')
         }
 
         if (privacyPolicy !== true) {
             throw new AppError('You must accept the privacy policy')
-        }
-
-        if (displayName.length > 20) {
-            throw new AppError('Display name must have a maximum of 20 characters')
-        }
-
-        if (biography.length > 80) {
-            throw new AppError('Biography must have a maximum of 80 characters')
         }
 
         if (await user.findByEmail(email)) {

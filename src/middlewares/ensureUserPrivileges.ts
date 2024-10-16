@@ -4,9 +4,11 @@ import { NextFunction, Request, Response } from 'express'
 /**
  * Middleware para garantir que o usuário autenticado tem privilégios necessários para acessar a rota
  */
-export function ensureUserPrivileges(requiredScopes: string[] = [], requiredRole: 'ADMIN' | 'MODERATOR' | 'USER' = 'USER') {
+export function ensureUserPrivileges(requiredScopes: string[] = [], requiredRole: 'ADMIN' | 'MODERATOR' | 'USER' | 'MODERATOR_OR_LOGGED' = 'USER') {
     return (request: Request, response: Response, next: NextFunction) => {
         try {
+            const { id } = request.params as { id?: string }
+
             const userAdmin = request.user.role === 'ADMIN'
             const userModerator = request.user.role === 'MODERATOR'
 
@@ -22,6 +24,13 @@ export function ensureUserPrivileges(requiredScopes: string[] = [], requiredRole
             // Se necessita ser um moderador
             if (requiredRole === 'MODERATOR' && !userModerator) {
                 throw new AppError('Permission denied', 403)
+            }
+
+            if (id) {
+                // Se necessita ser um moderador ou o próprio usuário
+                if (requiredRole === 'MODERATOR_OR_LOGGED' && request.user.id !== id && !userModerator) {
+                    throw new AppError('Permission denied', 403)
+                }
             }
 
             // Verifica se o usuário tem escopos necessários

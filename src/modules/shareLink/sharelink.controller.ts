@@ -21,4 +21,15 @@ export default class ShareLinkController {
             where: { id },
         })
     }
+
+    incrementUsedCount(id: string) {
+        return this.prisma.update({
+            where: { id },
+            data: {
+                countUsed: {
+                    increment: 1,
+                },
+            },
+        })
+    }
 }

@@ -7,9 +7,11 @@ import { AppError } from '@/functions/AppError'
  */
 export default async function profilePicture(request: Request, response: Response, next: NextFunction) {
     try {
+        const { id } = request.params as { id?: string }
+
         if (!request.file?.filename) throw new AppError('No file uploaded', 400)
 
-        await dbUser.updateProfilePictureUrl(request.user.id, request.file.filename)
+        await dbUser.updateProfilePictureUrl(id || request.user.id, request.file.filename)
 
         response.status(200).json({ message: 'Profile picture updated', newPictureUrl: request.file.filename })
     } catch (e) {

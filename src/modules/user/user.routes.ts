@@ -12,8 +12,15 @@ import listUsersToInvite from './http/users/listUsersToInvite'
 import hasNewNotifications from './http/notifications/hasNewNotifications'
 import pendingOrganizations from './http/users/pendingOrganizations'
 import linkSupervisorToUser from './http/supervisor/linkSupervisorToUser'
+import getSupervisedUsers from './http/supervisor/getSupervisedUsers'
+import { ensureUserPrivileges } from '@/middlewares/ensureUserPrivileges'
+import updateProfileInformations from './http/users/updateProfileInfos'
 
 const userRoutes = Router()
+
+// Supervisor
+userRoutes.get('/supervisedUsers', ensureAuthenticated, getSupervisedUsers)
+userRoutes.post('/linkSupervisorToUser', ensureAuthenticated, linkSupervisorToUser)
 
 // Autenticacao
 userRoutes.post('/login', authenticateUser)
@@ -26,10 +33,16 @@ userRoutes.get('/totalNotifications', ensureAuthenticated, hasNewNotifications)
 userRoutes.get('/pendingOrganizations', ensureAuthenticated, pendingOrganizations)
 userRoutes.post('/register', createNewUser)
 userRoutes.get('/toInvite', ensureAuthenticated, listUsersToInvite)
-userRoutes.get('/:id', ensureAuthenticated, getUserById)
-userRoutes.patch('/profilePicture', ensureAuthenticated, uploadSingleFileMiddleware, uploadS3Middleware, profilePicture)
 
-// Supervisor
-userRoutes.post('/linkSupervisorToUser', ensureAuthenticated, linkSupervisorToUser)
+userRoutes.patch(
+    '/:id/profilePicture',
+    ensureAuthenticated,
+    ensureUserPrivileges([], 'MODERATOR_OR_LOGGED'),
+    uploadSingleFileMiddleware,
+    uploadS3Middleware,
+    profilePicture
+)
+userRoutes.patch('/:id', ensureAuthenticated, ensureUserPrivileges([], 'MODERATOR_OR_LOGGED'), updateProfileInformations)
+userRoutes.get('/:id', ensureAuthenticated, getUserById)
 
 export { userRoutes }
