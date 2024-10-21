@@ -17,3 +17,17 @@ export async function uploadSingleFileMiddleware(request: Request, response: Res
         }),
     }).single('file')(request, response, next)
 }
+
+/**
+ * Middleware para upload de múltiplos arquivos
+ */
+export async function uploadMultipleFilesMiddleware(request: Request, response: Response, next: NextFunction) {
+    multer({
+        storage: multer.diskStorage({
+            destination: resolve('..', 'files', 'tmp'),
+            filename: (request, file, callback) => {
+                return callback(null, `${uuid()}.${mime.getExtension(file.mimetype)}`)
+            },
+        }),
+    }).array('files', 10)(request, response, next)
+}

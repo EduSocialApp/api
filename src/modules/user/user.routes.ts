@@ -5,7 +5,7 @@ import authenticateUser from './http/authentication/authenticateUser'
 import createNewUser from './http/users/createNewUser'
 import { ensureAuthenticated } from '@/middlewares/ensureAuthenticated'
 import getUserById from './http/users/getUserById'
-import { uploadSingleFileMiddleware } from '@/middlewares/multer'
+import { uploadMultipleFilesMiddleware, uploadSingleFileMiddleware } from '@/middlewares/multer'
 import profilePicture from './http/users/updateProfilePicture'
 import { uploadS3Middleware } from '@/middlewares/uploadS3'
 import listUsersToInvite from './http/users/listUsersToInvite'
@@ -15,8 +15,14 @@ import linkSupervisorToUser from './http/supervisor/linkSupervisorToUser'
 import getSupervisedUsers from './http/supervisor/getSupervisedUsers'
 import { ensureUserPrivileges } from '@/middlewares/ensureUserPrivileges'
 import updateProfileInformations from './http/users/updateProfileInfos'
+import createNewPost from './http/users/createNewPost'
+import getUserFeed from './http/users/getUserFeed'
 
 const userRoutes = Router()
+
+// Post
+userRoutes.post('/posts', ensureAuthenticated, uploadMultipleFilesMiddleware, createNewPost)
+userRoutes.get('/posts', ensureAuthenticated, getUserFeed)
 
 // Supervisor
 userRoutes.get('/supervisedUsers', ensureAuthenticated, getSupervisedUsers)
