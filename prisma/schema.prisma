@@ -221,6 +221,7 @@ model Media {
   id          String      @id // UUID
   description String // Descrição da mídia
   mediaUrl    String // URL da mídia
+  blurhash    String? // Hash do BlurHash
   createdAt   DateTime    @default(now()) // Data de criação
   updatedAt   DateTime    @default(now()) @updatedAt // Data de atualização
   postsMedias PostMedia[] // Mídias dos posts

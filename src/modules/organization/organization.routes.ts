@@ -1,13 +1,12 @@
 import { Router } from 'express'
 
-import { ensureAuthenticated } from '../../middlewares/ensureAuthenticated'
-
+import { ensureAuthenticated } from '@/middlewares/ensureAuthenticated'
 import approveOrganization from './http/approveOrganization'
 import createNewOrganization from './http/createNewOrganization'
 import linkUserOrganization from './http/linkUserOrganization'
 import unlinkUserOrganization from './http/unlinkUserOrganization'
 import rejectOrganization from './http/rejectOrganization'
-import { ensureUserPrivileges } from '@/middlewares/ensureUserPrivileges'
+import { ensureUserPrivileges } from '@/middlewares/privileges/ensureUserPrivileges'
 import { userScopes } from '../user/user.scopes'
 import organizationsWaitingForAnalysis from './http/organizationsWatingForAnalyse'
 import organizationsList from './http/organizationsList'

@@ -12,7 +12,9 @@ import { AppError } from '@/functions/AppError'
  * - Postagens de usuarios que fazem parte da mesma organizacao
  * - Postagens de usuarios supervisionados
  */
-export default async function getUserFeed(request: Request, response: Response, next: NextFunction) {
+export default async function getUserLoggedFeed(request: Request, response: Response, next: NextFunction) {
+    dbPost.userLoggedId = request.user.id
+
     try {
         let { lastPostId } = request.query as { lastPostId: string }
 

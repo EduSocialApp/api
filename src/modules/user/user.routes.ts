@@ -13,16 +13,19 @@ import hasNewNotifications from './http/notifications/hasNewNotifications'
 import pendingOrganizations from './http/users/pendingOrganizations'
 import linkSupervisorToUser from './http/supervisor/linkSupervisorToUser'
 import getSupervisedUsers from './http/supervisor/getSupervisedUsers'
-import { ensureUserPrivileges } from '@/middlewares/ensureUserPrivileges'
 import updateProfileInformations from './http/users/updateProfileInfos'
-import createNewPost from './http/users/createNewPost'
-import getUserFeed from './http/users/getUserFeed'
+import createNewPost from './http/posts/createNewPost'
+import getUserLoggedFeed from './http/posts/getUserLoggedFeed'
+import { generateBlurhash } from '@/middlewares/generateBlurhash'
+import getUserPosts from './http/posts/getUserPosts'
+import { ensureCanViewUserProfile } from '@/middlewares/privileges/ensureCanViewUserProfile'
+import { ensureCanEditUserProfile } from '@/middlewares/privileges/ensureCanEditUserProfile'
 
 const userRoutes = Router()
 
 // Post
-userRoutes.post('/posts', ensureAuthenticated, uploadMultipleFilesMiddleware, createNewPost)
-userRoutes.get('/posts', ensureAuthenticated, getUserFeed)
+userRoutes.post('/posts', ensureAuthenticated, uploadMultipleFilesMiddleware, generateBlurhash, createNewPost)
+userRoutes.get('/posts', ensureAuthenticated, getUserLoggedFeed)
 
 // Supervisor
 userRoutes.get('/supervisedUsers', ensureAuthenticated, getSupervisedUsers)
@@ -40,15 +43,10 @@ userRoutes.get('/pendingOrganizations', ensureAuthenticated, pendingOrganization
 userRoutes.post('/register', createNewUser)
 userRoutes.get('/toInvite', ensureAuthenticated, listUsersToInvite)
 
-userRoutes.patch(
-    '/:id/profilePicture',
-    ensureAuthenticated,
-    ensureUserPrivileges([], 'MODERATOR_OR_LOGGED'),
-    uploadSingleFileMiddleware,
-    uploadS3Middleware,
-    profilePicture
-)
-userRoutes.patch('/:id', ensureAuthenticated, ensureUserPrivileges([], 'MODERATOR_OR_LOGGED'), updateProfileInformations)
+userRoutes.patch('/:id/profilePicture', ensureAuthenticated, ensureCanEditUserProfile, uploadSingleFileMiddleware, uploadS3Middleware, profilePicture)
+userRoutes.patch('/:id', ensureAuthenticated, ensureCanEditUserProfile, updateProfileInformations)
 userRoutes.get('/:id', ensureAuthenticated, getUserById)
+
+userRoutes.get('/:id/posts', ensureAuthenticated, ensureCanViewUserProfile, getUserPosts)
 
 export { userRoutes }

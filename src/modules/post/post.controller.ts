@@ -3,6 +3,7 @@ import { prisma } from '../db'
 
 export default class PostController {
     private prisma = prisma.post
+    userLoggedId: string | undefined = undefined
 
     create({ userId, organizationId, title = '', content }: { userId?: string; organizationId?: string; title?: string; content: string }) {
         return this.prisma.create({
@@ -12,6 +13,95 @@ export default class PostController {
                 content,
                 userId,
                 organizationId,
+            },
+        })
+    }
+
+    updateLikesCounterByPostId(id: string, likesCount: number) {
+        return this.prisma.update({
+            where: {
+                id,
+            },
+            data: {
+                likesCount,
+            },
+        })
+    }
+
+    incrementLikesCounterByPostId(id: string, increment: number = 1) {
+        return this.prisma.update({
+            where: {
+                id,
+            },
+            data: {
+                likesCount: {
+                    increment,
+                },
+            },
+        })
+    }
+
+    decrementLikesCounterByPostId(id: string, decrement: number = 1) {
+        return this.prisma.update({
+            where: {
+                id,
+            },
+            data: {
+                likesCount: {
+                    decrement,
+                },
+            },
+        })
+    }
+
+    findById(id: string) {
+        return this.prisma.findUnique({
+            where: {
+                id,
+            },
+            select: {
+                id: true,
+                title: true,
+                content: true,
+                likesCount: true,
+                updatedAt: true,
+                createdAt: true,
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        displayName: true,
+                        pictureUrl: true,
+                    },
+                },
+                organization: {
+                    select: {
+                        id: true,
+                        name: true,
+                        displayName: true,
+                        pictureUrl: true,
+                        verified: true,
+                    },
+                },
+                medias: {
+                    select: {
+                        media: {
+                            select: {
+                                id: true,
+                                mediaUrl: true,
+                                description: true,
+                                blurhash: true,
+                            },
+                        },
+                    },
+                },
+                likes: this.userLoggedId // Se o usuario estiver logado, verifica se ele curtiu a postagem
+                    ? {
+                          where: {
+                              userId: this.userLoggedId,
+                          },
+                      }
+                    : undefined,
             },
         })
     }
@@ -41,6 +131,7 @@ export default class PostController {
                 content: true,
                 likesCount: true,
                 updatedAt: true,
+                createdAt: true,
                 user: {
                     select: {
                         id: true,
@@ -65,10 +156,23 @@ export default class PostController {
                                 id: true,
                                 mediaUrl: true,
                                 description: true,
+                                blurhash: true,
                             },
                         },
                     },
                 },
+                likes: this.userLoggedId // Se o usuario estiver logado, verifica se ele curtiu a postagem
+                    ? {
+                          where: {
+                              userId: this.userLoggedId,
+                          },
+                          select: {
+                              userId: true,
+                              postId: true,
+                              updatedAt: true,
+                          },
+                      }
+                    : undefined,
             },
             orderBy: {
                 updatedAt: 'desc',

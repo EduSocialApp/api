@@ -28,8 +28,10 @@ export default async function createNewPost(request: Request, response: Response
                     await dbMedia.newMediaPost({
                         postId: post.id,
                         mediaUrl: fileInAWS.Location,
+                        blurhash: file.blurhash,
                     })
-                } catch {
+                } catch (e) {
+                    console.log(e)
                     // ignore upload failed
                 }
             }
