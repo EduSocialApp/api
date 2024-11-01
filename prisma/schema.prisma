@@ -75,6 +75,7 @@ model Post {
   id             String        @id // UUID
   userId         String? // ID do usuário, se for nulo é um post da organização
   organizationId String? // ID da organização, se for nulo é um post do usuário
+  eventId        String? // ID do evento
   title          String // Título do post
   content        String // Conteúdo do post
   likesCount     Int           @default(0) // Número de curtidas
@@ -85,6 +86,7 @@ model Post {
   likes          PostLike[] // Curtidas
   comments       PostComment[] // Comentários
   medias         PostMedia[] // Mídias
+  event          Event?
 }
 
 model PostComment {
@@ -105,6 +107,18 @@ model PostMedia {
   media   Media  @relation(fields: [mediaId], references: [id]) // Mídia
 
   @@id([postId, mediaId])
+}
+
+model Event {
+  id        String   @id // UUID
+  postId    String   @unique // ID do post
+  startDate DateTime // Data de início
+  endDate   DateTime // Data de término
+  addressId String // ID do endereço
+  createdAt DateTime @default(now()) // Data de criação
+  updatedAt DateTime @default(now()) @updatedAt // Data de atualização
+  address   Address  @relation(fields: [addressId], references: [id]) // Endereço
+  post      Post     @relation(fields: [postId], references: [id]) // Post
 }
 
 model PostLike {
@@ -144,7 +158,6 @@ model Organization {
   createdAt                   DateTime              @default(now()) // Data de criação
   updatedAt                   DateTime              @default(now()) @updatedAt // Data de atualização
   members                     OrganizationMember[] // Membros da organização
-  events                      OrganizationEvent[] // Eventos da organização
   posts                       Post[] // Posts da organização
   addresses                   OrganizationAddress[] // Endereços da organização
   reportsReleased             UserReport[] // Comunicados feitos pela organização
@@ -157,20 +170,6 @@ model OrganizationAddress {
   address        Address      @relation(fields: [addressId], references: [id]) // Endereço
 
   @@id([organizationId, addressId])
-}
-
-model OrganizationEvent {
-  id             String       @id // UUID
-  organizationId String // ID da organização
-  title          String // Título do evento
-  description    String // Descrição do evento
-  startDate      DateTime // Data de início
-  endDate        DateTime // Data de término
-  addressId      String // ID do endereço
-  createdAt      DateTime     @default(now()) // Data de criação
-  updatedAt      DateTime     @default(now()) @updatedAt // Data de atualização
-  organization   Organization @relation(fields: [organizationId], references: [id]) // Organização
-  address        Address      @relation(fields: [addressId], references: [id]) // Endereço
 }
 
 model OrganizationMember {
@@ -186,22 +185,22 @@ model OrganizationMember {
 }
 
 model Address {
-  id                        String                @id // UUID
-  street                    String // Rua
-  number                    String // Número
-  complement                String // Complemento
-  neighborhood              String // Bairro
-  city                      String // Cidade
-  state                     String // Estado
-  country                   String // País
-  zipCode                   String // CEP
-  ibgeCode                  String // Código IBGE
-  geolocation               String // Geolocalização
-  createdAt                 DateTime              @default(now()) // Data de criação
-  updatedAt                 DateTime              @default(now()) @updatedAt // Data de atualização
-  organizationAddresses     OrganizationAddress[] // Endereços das organizações
-  userAddresses             UserAddress[] // Endereços dos usuários
-  organizationEventsAddress OrganizationEvent[] // Endereços dos eventos
+  id                    String                @id // UUID
+  street                String // Rua
+  number                String // Número
+  complement            String // Complemento
+  neighborhood          String // Bairro
+  city                  String // Cidade
+  state                 String // Estado
+  country               String // País
+  zipCode               String // CEP
+  ibgeCode              String // Código IBGE
+  geolocation           String // Geolocalização
+  createdAt             DateTime              @default(now()) // Data de criação
+  updatedAt             DateTime              @default(now()) @updatedAt // Data de atualização
+  organizationAddresses OrganizationAddress[] // Endereços das organizações
+  userAddresses         UserAddress[] // Endereços dos usuários
+  events                Event[]
 }
 
 model ShareLink {
