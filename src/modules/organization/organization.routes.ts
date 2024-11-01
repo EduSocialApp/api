@@ -15,19 +15,30 @@ import { ensureOrgExists } from '@/middlewares/ensureOrgExists'
 import findOrganizationById from './http/findOrganizationById'
 import updateProfilePicture from './http/updateProfilePicture'
 import { ensureOrgPrivileges } from '@/middlewares/ensureOrgPrivileges'
-import { uploadSingleFileMiddleware } from '@/middlewares/multer'
+import { uploadMultipleFilesMiddleware, uploadSingleFileMiddleware } from '@/middlewares/multer'
 import { uploadS3Middleware } from '@/middlewares/uploadS3'
 import organizationMembers from './http/organizationMembers'
 import userPermissionsInOrganization from './http/userPermissionsInOrganization'
 import approveUserLinkOrganization from './http/approveUserLinkOrganization'
 import userOrganizations from './http/userOrganizations'
+import getOrganizationPosts from './http/posts/getOrganizationPosts'
+import { generateBlurhash } from '@/middlewares/generateBlurhash'
+import createNewPost from './http/posts/createNewPost'
 
 const orgRoutes = Router()
 
 orgRoutes.get('/', organizationsList)
-orgRoutes.get('/user/:id', ensureAuthenticated, userOrganizations)
 orgRoutes.post('/create', ensureAuthenticated, ensureUserPrivileges([userScopes.organization.create]), createNewOrganization)
 orgRoutes.get('/waitingAnalysis', ensureAuthenticated, ensureUserPrivileges([], 'MODERATOR'), organizationsWaitingForAnalysis)
+
+orgRoutes.get('/user/:id', ensureAuthenticated, userOrganizations)
+
+orgRoutes.post('/member/:organizationMemberId/approve', ensureAuthenticated, approveUserLinkOrganization)
+orgRoutes.post('/member/:organizationMemberId/unlink', ensureAuthenticated, unlinkUserOrganization)
+
+// Post
+orgRoutes.post('/:organizationId/posts', ensureAuthenticated, uploadMultipleFilesMiddleware, generateBlurhash, createNewPost)
+orgRoutes.get('/:organizationId/posts', ensureAuthenticated, getOrganizationPosts)
 
 orgRoutes.get('/:id', ensureAuthenticated, ensureOrgExists, findOrganizationById)
 orgRoutes.get('/:id/totalMembers', ensureAuthenticated, ensureOrgExists, totalMembersInOrganization)
@@ -35,9 +46,6 @@ orgRoutes.get('/:id/members', ensureAuthenticated, ensureOrgExists, organization
 orgRoutes.get('/:id/role', ensureAuthenticated, ensureOrgExists, userPermissionsInOrganization)
 
 orgRoutes.post('/:id/link', ensureAuthenticated, ensureOrgExists, linkUserOrganization)
-
-orgRoutes.post('/member/:organizationMemberId/approve', ensureAuthenticated, approveUserLinkOrganization)
-orgRoutes.post('/member/:organizationMemberId/unlink', ensureAuthenticated, unlinkUserOrganization)
 
 orgRoutes.patch(
     '/:id/profilePicture',
