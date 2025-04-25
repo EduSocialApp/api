@@ -29,3 +29,5 @@ prisma/migrations
 .DS_Store
 
 yarn.lock
+
+dist/
