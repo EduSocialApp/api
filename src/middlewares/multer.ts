@@ -1,4 +1,3 @@
-import { NextFunction, Request, Response } from 'express'
 import multer from 'multer'
 import uuid from '@/functions/uuid'
 import mime from 'mime/lite'
@@ -7,7 +6,7 @@ import { resolve } from 'path'
 /**
  * Middleware para upload de um único arquivo
  */
-export async function uploadSingleFileMiddleware(request: Request, response: Response, next: NextFunction) {
+export async function uploadSingleFileMiddleware(request: any, response: any, next: any) {
     multer({
         storage: multer.diskStorage({
             destination: resolve('..', 'files', 'tmp'),
@@ -21,7 +20,7 @@ export async function uploadSingleFileMiddleware(request: Request, response: Res
 /**
  * Middleware para upload de múltiplos arquivos
  */
-export async function uploadMultipleFilesMiddleware(request: Request, response: Response, next: NextFunction) {
+export async function uploadMultipleFilesMiddleware(request: any, response: any, next: any) {
     multer({
         storage: multer.diskStorage({
             destination: resolve('..', 'files', 'tmp'),
