@@ -1,3 +1,4 @@
+import { PostLevelEnum } from '@prisma/client'
 import uuid from '../../functions/uuid'
 import { prisma } from '../db'
 
@@ -5,7 +6,36 @@ export default class PostController {
     private prisma = prisma.post
     userLoggedId: string | undefined = undefined
 
-    create({ userId, organizationId, title = '', content }: { userId?: string; organizationId?: string; title?: string; content: string }) {
+    parsePostLevel(level: string): PostLevelEnum {
+        switch (level) {
+            case 'URGENT':
+                return PostLevelEnum.URGENT
+            case 'IMPORTANT':
+                return PostLevelEnum.IMPORTANT
+            case 'NORMAL':
+                return PostLevelEnum.NORMAL
+            default:
+                return PostLevelEnum.NORMAL
+        }
+    }
+
+    create({
+        userId,
+        organizationId,
+        title = '',
+        content,
+        startDate,
+        endDate,
+        level = PostLevelEnum.NORMAL,
+    }: {
+        userId?: string
+        organizationId?: string
+        title?: string
+        content: string
+        startDate?: Date
+        endDate?: Date
+        level?: PostLevelEnum
+    }) {
         return this.prisma.create({
             data: {
                 id: uuid(),
@@ -13,6 +43,9 @@ export default class PostController {
                 content,
                 userId,
                 organizationId,
+                startDate,
+                endDate,
+                level,
             },
         })
     }

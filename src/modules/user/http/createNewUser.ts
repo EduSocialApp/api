@@ -4,7 +4,7 @@ import { passwordToHash } from '@/functions/password'
 import { AppError } from '@/functions/AppError'
 import { gravatarProfilePictureUrl } from '@/functions/gravatar'
 
-import user from '../../user.service'
+import user from '../user.service'
 
 /**
  * Cria novo usuario

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 
-import user from '../../user.service'
+import user from '../user.service'
 
 /**
  * Notificações do usuario

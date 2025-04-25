@@ -6,7 +6,7 @@ import organization from '../organization.service'
 import organizationMember from '../member/organizationmember.service'
 import dbAddress from '../../address/address.service'
 import organizationAddress from '../../address/organization/organizationaddress.service'
-import { sendNotificationForAdminsAndModerators } from '@/functions/sendNotification'
+import { sendNotificationToAdminsAndModerators } from '../../../functions/sendNotification'
 
 /**
  * Cria nova organizacao
@@ -100,7 +100,7 @@ export default async function createNewOrganization(request: Request, response: 
             invited: false,
         })
 
-        sendNotificationForAdminsAndModerators('Nova organização criada', `A organização ${displayName} foi criada`)
+        sendNotificationToAdminsAndModerators('Nova organização criada', `A organização ${displayName} foi criada`)
 
         response.status(201).json({
             id,

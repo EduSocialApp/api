@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 
-import user from '../../user.service'
+import user from '../user.service'
 
 /**
  * Lista de usuários que podem ser convidados para uma organização ou para ser um supervisionado

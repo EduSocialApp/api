@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 
-import dbSupervisedUser from '../../supervised/superviseduser.service'
+import dbSupervisedUser from '../supervised/superviseduser.service'
 
 /**
  * Busca usuarios supervisionados pelo supervisor

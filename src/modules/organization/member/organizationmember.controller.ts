@@ -137,4 +137,21 @@ export default class OrganizationMemberController {
             },
         })
     }
+
+    async usersBelongToOrganization(organizationId: string, userIds: string[]) {
+        // Retorne somente o id dos usuarios que pertencem a organizacao
+        const usersFiltered = await this.prisma.findMany({
+            where: {
+                organizationId,
+                userId: {
+                    in: userIds,
+                },
+            },
+            select: {
+                userId: true,
+            },
+        })
+
+        return usersFiltered.map((user) => user.userId)
+    }
 }

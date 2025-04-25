@@ -1,10 +1,10 @@
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 // ------------------------------------------------------------------
@@ -12,260 +12,268 @@ datasource db {
 // ------------------------------------------------------------------
 
 model User {
-  id                   String               @id // UUID
-  name                 String // Nome completo
-  displayName          String // Nome de exibição
-  biography            String // Biografia
-  email                String               @unique // Email
-  emailVerified        Boolean              @default(false) // Email verificado
-  password             String // Senha criptografada
-  document             String // Documento de indentificação
-  documentType         DocumentEnum // Tipo de documento
-  documentVerified     Boolean              @default(false) // Documento verificado (usuário verificado)
-  pictureUrl           String // URL da foto de perfil
-  phone                String // Telefone ou celular
-  phoneVerified        Boolean              @default(false) // Telefone verificado
-  scopes               String[] // Escopos que o usuário tem acesso
-  adressesIds          String[] // IDs dos endereços do usuário
-  role                 RoleEnum // Papel do usuário
-  birthday             DateTime // Data de nascimento
-  receiveEmails        Boolean              @default(true) // Receber emails
-  receiveNotifications Boolean              @default(true) // Receber notificações
-  connectWithNeighbors Boolean              @default(true) // Conectar com a agenda do celular
-  termsAccepted        Boolean              @default(false) // Termos de uso aceitos
-  privacyAccepted      Boolean              @default(false) // Política de privacidade aceita
-  createdAt            DateTime             @default(now()) // Data de criação
-  updatedAt            DateTime             @default(now()) @updatedAt // Data de atualização
-  sessions             Session[] // Sessões do usuário
-  organizations        OrganizationMember[] // Organizações que o usuário faz parte  
-  supervisedUsers      SupervisedUser[]     @relation("SupervisedUsers") // Usuários supervisionados
-  supervisorUsers      SupervisedUser[]     @relation("SupervisorUsers") // Usuários que supervisionam este usuário
-  posts                Post[] // Posts do usuário
-  likes                PostLike[] // Curtidas do usuário
-  comments             PostComment[] // Comentários do usuário
-  addresses            UserAddress[] // Endereços do usuário
-  reports              UserReport[]         @relation("ReportedUser") // Comunicados feitos para o usuário
-  reportsCreated       UserReport[]         @relation("ReportAuthor") // Comunicados feitos pelo usuário
-  sharedLinks          ShareLink[] // Links compartilhados
+    id                   String               @id // UUID
+    name                 String // Nome completo
+    displayName          String // Nome de exibição
+    biography            String // Biografia
+    email                String               @unique // Email
+    emailVerified        Boolean              @default(false) // Email verificado
+    password             String // Senha criptografada
+    document             String // Documento de indentificação
+    documentType         DocumentEnum // Tipo de documento
+    documentVerified     Boolean              @default(false) // Documento verificado (usuário verificado)
+    pictureUrl           String // URL da foto de perfil
+    phone                String // Telefone ou celular
+    phoneVerified        Boolean              @default(false) // Telefone verificado
+    scopes               String[] // Escopos que o usuário tem acesso
+    adressesIds          String[] // IDs dos endereços do usuário
+    role                 RoleEnum // Papel do usuário
+    birthday             DateTime // Data de nascimento
+    receiveEmails        Boolean              @default(true) // Receber emails
+    receiveNotifications Boolean              @default(true) // Receber notificações
+    connectWithNeighbors Boolean              @default(true) // Conectar com a agenda do celular
+    termsAccepted        Boolean              @default(false) // Termos de uso aceitos
+    privacyAccepted      Boolean              @default(false) // Política de privacidade aceita
+    createdAt            DateTime             @default(now()) // Data de criação
+    updatedAt            DateTime             @default(now()) @updatedAt // Data de atualização
+    sessions             Session[] // Sessões do usuário
+    organizations        OrganizationMember[] // Organizações que o usuário faz parte  
+    supervisedUsers      SupervisedUser[]     @relation("SupervisedUsers") // Usuários supervisionados
+    supervisorUsers      SupervisedUser[]     @relation("SupervisorUsers") // Usuários que supervisionam este usuário
+    posts                Post[] // Posts do usuário
+    likes                PostLike[] // Curtidas do usuário
+    comments             PostComment[] // Comentários do usuário
+    addresses            UserAddress[] // Endereços do usuário
+    reports              UserReport[]         @relation("ReportedUser") // Comunicados feitos para o usuário
+    reportsCreated       UserReport[]         @relation("ReportAuthor") // Comunicados feitos pelo usuário
+    sharedLinks          ShareLink[] // Links compartilhados
+    notifiedPosts        PostNotifiedUsers[] // Posts destinados ao usuário
 }
 
 model UserReport {
-  id             String       @id // UUID
-  reportedUserId String // ID do usuário
-  userId         String // ID do usuário que fez o comunicado
-  organizationId String // ID da organização
-  content        String // Conteúdo do relatório
-  createdAt      DateTime     @default(now()) // Data de criação
-  updatedAt      DateTime     @default(now()) @updatedAt // Data de atualização
-  reportedUser   User         @relation("ReportedUser", fields: [reportedUserId], references: [id]) // Usuário
-  user           User         @relation("ReportAuthor", fields: [userId], references: [id]) // Usuário que fez o comunicado
-  organization   Organization @relation(fields: [organizationId], references: [id]) // Membro da organização
+    id             String       @id // UUID
+    reportedUserId String // ID do usuário
+    userId         String // ID do usuário que fez o comunicado
+    organizationId String // ID da organização
+    content        String // Conteúdo do relatório
+    createdAt      DateTime     @default(now()) // Data de criação
+    updatedAt      DateTime     @default(now()) @updatedAt // Data de atualização
+    reportedUser   User         @relation("ReportedUser", fields: [reportedUserId], references: [id]) // Usuário
+    user           User         @relation("ReportAuthor", fields: [userId], references: [id]) // Usuário que fez o comunicado
+    organization   Organization @relation(fields: [organizationId], references: [id]) // Membro da organização
 }
 
 model UserAddress {
-  userId    String // ID do usuário
-  addressId String // ID do endereço
-  user      User    @relation(fields: [userId], references: [id]) // Usuário
-  address   Address @relation(fields: [addressId], references: [id]) // Endereço
+    userId    String // ID do usuário
+    addressId String // ID do endereço
+    user      User    @relation(fields: [userId], references: [id]) // Usuário
+    address   Address @relation(fields: [addressId], references: [id]) // Endereço
 
-  @@id([userId, addressId])
+    @@id([userId, addressId])
 }
 
 model Post {
-  id             String        @id // UUID
-  userId         String? // ID do usuário, se for nulo é um post da organização
-  organizationId String? // ID da organização, se for nulo é um post do usuário
-  title          String // Título do post
-  content        String // Conteúdo do post
-  likesCount     Int           @default(0) // Número de curtidas
-  createdAt      DateTime      @default(now()) // Data de criação
-  updatedAt      DateTime      @default(now()) @updatedAt // Data de atualização
-  user           User?         @relation(fields: [userId], references: [id]) // Usuário
-  organization   Organization? @relation(fields: [organizationId], references: [id]) // Organização
-  likes          PostLike[] // Curtidas
-  comments       PostComment[] // Comentários
-  medias         PostMedia[] // Mídias
+    id             String              @id // UUID
+    userId         String? // ID do usuário, se for nulo é um post da organização
+    organizationId String? // ID da organização, se for nulo é um post do usuário
+    title          String // Título do post
+    content        String // Conteúdo do post
+    likesCount     Int                 @default(0) // Número de curtidas
+    startDate      DateTime? // Data de início do post como evento
+    endDate        DateTime? // Data de término do post como evento
+    level          PostLevelEnum       @default(NORMAL) // Nível do post
+    adressId       String? // ID do endereço
+    createdAt      DateTime            @default(now()) // Data de criação
+    updatedAt      DateTime            @default(now()) @updatedAt // Data de atualização
+    user           User?               @relation(fields: [userId], references: [id]) // Usuário
+    organization   Organization?       @relation(fields: [organizationId], references: [id]) // Organização
+    likes          PostLike[] // Curtidas
+    comments       PostComment[] // Comentários
+    medias         PostMedia[] // Mídias
+    notifiedUsers  PostNotifiedUsers[] // Usuários notificados
+    address        Address?            @relation(fields: [adressId], references: [id]) // Endereço
+}
+
+model PostNotifiedUsers {
+    postId String // Post ID
+    userId String // User ID
+    post   Post   @relation(fields: [postId], references: [id]) // Related post
+    user   User   @relation(fields: [userId], references: [id]) // Related user
+
+    @@id([postId, userId])
 }
 
 model PostComment {
-  id        String   @id // UUID
-  userId    String // ID do usuário
-  postId    String // ID do post
-  content   String // Conteúdo do comentário
-  createdAt DateTime @default(now()) // Data de criação
-  updatedAt DateTime @default(now()) @updatedAt // Data de atualização
-  user      User     @relation(fields: [userId], references: [id]) // Usuário
-  post      Post     @relation(fields: [postId], references: [id]) // Post
+    id        String   @id // UUID
+    userId    String // ID do usuário
+    postId    String // ID do post
+    content   String // Conteúdo do comentário
+    createdAt DateTime @default(now()) // Data de criação
+    updatedAt DateTime @default(now()) @updatedAt // Data de atualização
+    user      User     @relation(fields: [userId], references: [id]) // Usuário
+    post      Post     @relation(fields: [postId], references: [id]) // Post
 }
 
 model PostMedia {
-  postId  String // ID do post
-  mediaId String // Descrição da mídia
-  post    Post   @relation(fields: [postId], references: [id]) // Post
-  media   Media  @relation(fields: [mediaId], references: [id]) // Mídia
+    postId  String // ID do post
+    mediaId String // Descrição da mídia
+    post    Post   @relation(fields: [postId], references: [id]) // Post
+    media   Media  @relation(fields: [mediaId], references: [id]) // Mídia
 
-  @@id([postId, mediaId])
+    @@id([postId, mediaId])
 }
 
 model PostLike {
-  userId    String // ID do usuário
-  postId    String // ID do post
-  createdAt DateTime @default(now()) // Data de criação
-  updatedAt DateTime @default(now()) @updatedAt // Data de atualização
-  user      User     @relation(fields: [userId], references: [id]) // Usuário
-  post      Post     @relation(fields: [postId], references: [id]) // Post
+    userId    String // ID do usuário
+    postId    String // ID do post
+    createdAt DateTime @default(now()) // Data de criação
+    updatedAt DateTime @default(now()) @updatedAt // Data de atualização
+    user      User     @relation(fields: [userId], references: [id]) // Usuário
+    post      Post     @relation(fields: [postId], references: [id]) // Post
 
-  @@id([userId, postId])
+    @@id([userId, postId])
 }
 
 model SupervisedUser {
-  supervisorUserId String // ID do usuário supervisor
-  supervisedUserId String // ID do usuário supervisionado
-  createdAt        DateTime @default(now()) // Data de criação
-  updatedAt        DateTime @default(now()) @updatedAt // Data de atualização
-  supervisedUser   User     @relation("SupervisedUsers", fields: [supervisedUserId], references: [id]) // Usuário supervisionado
-  supervisorUser   User     @relation("SupervisorUsers", fields: [supervisorUserId], references: [id]) // Usuário supervisor
+    supervisorUserId String // ID do usuário supervisor
+    supervisedUserId String // ID do usuário supervisionado
+    createdAt        DateTime @default(now()) // Data de criação
+    updatedAt        DateTime @default(now()) @updatedAt // Data de atualização
+    supervisedUser   User     @relation("SupervisedUsers", fields: [supervisedUserId], references: [id]) // Usuário supervisionado
+    supervisorUser   User     @relation("SupervisorUsers", fields: [supervisorUserId], references: [id]) // Usuário supervisor
 
-  @@id([supervisorUserId, supervisedUserId])
+    @@id([supervisorUserId, supervisedUserId])
 }
 
 model Organization {
-  id                          String                @id // UUID
-  name                        String // Nome
-  displayName                 String // Nome de exibição
-  biography                   String // Biografia
-  email                       String // Email 
-  phone                       String // Telefone
-  verified                    Boolean               @default(false) // Organização verificada
-  rejectedVerificationMessage String? // Mensagem de rejeição da verificação
-  document                    String // Documento de identificação
-  documentType                DocumentEnum // Tipo de documento
-  pictureUrl                  String // URL da foto de perfil
-  createdAt                   DateTime              @default(now()) // Data de criação
-  updatedAt                   DateTime              @default(now()) @updatedAt // Data de atualização
-  members                     OrganizationMember[] // Membros da organização
-  events                      OrganizationEvent[] // Eventos da organização
-  posts                       Post[] // Posts da organização
-  addresses                   OrganizationAddress[] // Endereços da organização
-  reportsReleased             UserReport[] // Comunicados feitos pela organização
+    id                          String                @id // UUID
+    name                        String // Nome
+    displayName                 String // Nome de exibição
+    biography                   String // Biografia
+    email                       String // Email 
+    phone                       String // Telefone
+    verified                    Boolean               @default(false) // Organização verificada
+    rejectedVerificationMessage String? // Mensagem de rejeição da verificação
+    document                    String // Documento de identificação
+    documentType                DocumentEnum // Tipo de documento
+    pictureUrl                  String // URL da foto de perfil
+    createdAt                   DateTime              @default(now()) // Data de criação
+    updatedAt                   DateTime              @default(now()) @updatedAt // Data de atualização
+    members                     OrganizationMember[] // Membros da organização
+    posts                       Post[] // Posts da organização
+    addresses                   OrganizationAddress[] // Endereços da organização
+    reportsReleased             UserReport[] // Comunicados feitos pela organização
 }
 
 model OrganizationAddress {
-  organizationId String // ID da organização
-  addressId      String // ID do endereço
-  organization   Organization @relation(fields: [organizationId], references: [id]) // Organização
-  address        Address      @relation(fields: [addressId], references: [id]) // Endereço
+    organizationId String // ID da organização
+    addressId      String // ID do endereço
+    organization   Organization @relation(fields: [organizationId], references: [id]) // Organização
+    address        Address      @relation(fields: [addressId], references: [id]) // Endereço
 
-  @@id([organizationId, addressId])
-}
-
-model OrganizationEvent {
-  id             String       @id // UUID
-  organizationId String // ID da organização
-  title          String // Título do evento
-  description    String // Descrição do evento
-  startDate      DateTime // Data de início
-  endDate        DateTime // Data de término
-  addressId      String // ID do endereço
-  createdAt      DateTime     @default(now()) // Data de criação
-  updatedAt      DateTime     @default(now()) @updatedAt // Data de atualização
-  organization   Organization @relation(fields: [organizationId], references: [id]) // Organização
-  address        Address      @relation(fields: [addressId], references: [id]) // Endereço
+    @@id([organizationId, addressId])
 }
 
 model OrganizationMember {
-  id             String               @id // UUID
-  userId         String // ID do usuário
-  organizationId String // ID da organização
-  invited        Boolean              @default(false) // Usuário foi convidado
-  role           RoleOrganizationEnum // Papel do usuário na organização
-  createdAt      DateTime             @default(now()) // Data de criação
-  updatedAt      DateTime             @default(now()) @updatedAt // Data de atualização
-  user           User                 @relation(fields: [userId], references: [id]) // Usuário
-  organization   Organization         @relation(fields: [organizationId], references: [id]) // Organização
+    id             String               @id // UUID
+    userId         String // ID do usuário
+    organizationId String // ID da organização
+    invited        Boolean              @default(false) // Usuário foi convidado
+    role           RoleOrganizationEnum // Papel do usuário na organização
+    createdAt      DateTime             @default(now()) // Data de criação
+    updatedAt      DateTime             @default(now()) @updatedAt // Data de atualização
+    user           User                 @relation(fields: [userId], references: [id]) // Usuário
+    organization   Organization         @relation(fields: [organizationId], references: [id]) // Organização
 }
 
 model Address {
-  id                        String                @id // UUID
-  street                    String // Rua
-  number                    String // Número
-  complement                String // Complemento
-  neighborhood              String // Bairro
-  city                      String // Cidade
-  state                     String // Estado
-  country                   String // País
-  zipCode                   String // CEP
-  ibgeCode                  String // Código IBGE
-  geolocation               String // Geolocalização
-  createdAt                 DateTime              @default(now()) // Data de criação
-  updatedAt                 DateTime              @default(now()) @updatedAt // Data de atualização
-  organizationAddresses     OrganizationAddress[] // Endereços das organizações
-  userAddresses             UserAddress[] // Endereços dos usuários
-  organizationEventsAddress OrganizationEvent[] // Endereços dos eventos
+    id                    String                @id // UUID
+    street                String // Rua
+    number                String // Número
+    complement            String // Complemento
+    neighborhood          String // Bairro
+    city                  String // Cidade
+    state                 String // Estado
+    country               String // País
+    zipCode               String // CEP
+    ibgeCode              String // Código IBGE
+    geolocation           String // Geolocalização
+    createdAt             DateTime              @default(now()) // Data de criação
+    updatedAt             DateTime              @default(now()) @updatedAt // Data de atualização
+    organizationAddresses OrganizationAddress[] // Endereços das organizações
+    userAddresses         UserAddress[] // Endereços dos usuários
+    postsAdresses         Post[] // Endereços dos eventos
 }
 
 model ShareLink {
-  id        String            @id // UUID
-  userId    String? // ID do usuário que criou o link
-  data      String // URL do link
-  type      ShareLinkTypeEnum // Tipo do link
-  countUsed Int               @default(0) // Número de vezes que o link foi usado
-  maxUses   Int               @default(0) // Número máximo de vezes que o link pode ser usado
-  expiresAt DateTime? // Data de expiração
-  createdAt DateTime          @default(now()) // Data de criação
-  updatedAt DateTime          @default(now()) @updatedAt // Data de atualização
-  user      User?             @relation(fields: [userId], references: [id]) // Usuário
+    id        String            @id // UUID
+    userId    String? // ID do usuário que criou o link
+    data      String // URL do link
+    type      ShareLinkTypeEnum // Tipo do link
+    countUsed Int               @default(0) // Número de vezes que o link foi usado
+    maxUses   Int               @default(0) // Número máximo de vezes que o link pode ser usado
+    expiresAt DateTime? // Data de expiração
+    createdAt DateTime          @default(now()) // Data de criação
+    updatedAt DateTime          @default(now()) @updatedAt // Data de atualização
+    user      User?             @relation(fields: [userId], references: [id]) // Usuário
 }
 
 model Media {
-  id          String      @id // UUID
-  description String // Descrição da mídia
-  mediaUrl    String // URL da mídia
-  blurhash    String? // Hash do BlurHash
-  createdAt   DateTime    @default(now()) // Data de criação
-  updatedAt   DateTime    @default(now()) @updatedAt // Data de atualização
-  postsMedias PostMedia[] // Mídias dos posts
+    id          String      @id // UUID
+    description String // Descrição da mídia
+    mediaUrl    String // URL da mídia
+    blurhash    String? // Hash do BlurHash
+    createdAt   DateTime    @default(now()) // Data de criação
+    updatedAt   DateTime    @default(now()) @updatedAt // Data de atualização
+    postsMedias PostMedia[] // Mídias dos posts
 }
 
 model Session {
-  id                String   @id // UUID (refresh token)
-  userId            String // ID do usuário
-  accessTokenHash   String   @default("") // Hash do access token
-  content           String // Conteúdo da sessão
-  identifier        String // Identificador da sessão
-  ip                String // IP do usuário
-  notificationToken String? // Token de notificação
-  createdAt         DateTime @default(now()) // Data de criação
-  updatedAt         DateTime @default(now()) @updatedAt // Data de atualização
-  user              User     @relation(fields: [userId], references: [id]) // Usuário
+    id                String   @id // UUID (refresh token)
+    userId            String // ID do usuário
+    accessTokenHash   String   @default("") // Hash do access token
+    content           String // Conteúdo da sessão
+    identifier        String // Identificador da sessão
+    ip                String // IP do usuário
+    notificationToken String? // Token de notificação
+    createdAt         DateTime @default(now()) // Data de criação
+    updatedAt         DateTime @default(now()) @updatedAt // Data de atualização
+    user              User     @relation(fields: [userId], references: [id]) // Usuário
 }
 
 // Documentos de identificação
 enum DocumentEnum {
-  CPF
-  CNPJ
-  PASSAPORT
-  RG
-  CNH
-  UNKNOW
+    CPF
+    CNPJ
+    PASSAPORT
+    RG
+    CNH
+    UNKNOW
+}
+
+// Niveis do post
+enum PostLevelEnum {
+    URGENT
+    IMPORTANT
+    NORMAL
 }
 
 // Papéis dos usuários no sistema
 enum RoleEnum {
-  ADMIN
-  MODERATOR
-  USER
+    ADMIN
+    MODERATOR
+    USER
 }
 
 // Papéis dos usuários nas organizações
 enum RoleOrganizationEnum {
-  OWNER
-  MODERATOR
-  USER
+    OWNER
+    MODERATOR
+    USER
 }
 
 // Tipos de ShareLink
 enum ShareLinkTypeEnum {
-  USER
-  ORGANIZATION
+    USER
+    ORGANIZATION
 }

@@ -1,10 +1,10 @@
 import { sendNotificationToUserId } from '@/functions/sendNotification'
 import { NextFunction, Request, Response } from 'express'
-import dbUser from '../../user.service'
+import dbUser from '../user.service'
 import { AppError } from '@/functions/AppError'
 
-import dbSupervisedUser from '../../supervised/superviseduser.service'
-import dbShareLink from '../../../shareLink/sharelink.service'
+import dbSupervisedUser from '../supervised/superviseduser.service'
+import dbShareLink from '../../shareLink/sharelink.service'
 
 /**
  * Cria vinculo entre supervisor e usuário
