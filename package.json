@@ -4,8 +4,8 @@
     "description": "Aplicativo escolar com a finalidade de aumentar a participação dos responsáveis no desenvolvimento dos alunos da educação infantil",
     "main": "index.js",
     "scripts": {
-        "start": "tsc && node dist/server/index.js",
-        "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules --exit-child index.ts",
+        "start": "tsc && node dist/index.js",
+        "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules --exit-child src/index.ts",
         "seed": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules --exit-child prisma/seed.ts",
         "build": "yarn tsc",
         "lint": "eslint src/**/*.ts",
