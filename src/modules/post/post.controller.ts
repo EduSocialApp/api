@@ -212,4 +212,17 @@ export default class PostController {
             },
         })
     }
+
+    async countLikesByOrganizationId(organizationId: string) {
+        const result = await this.prisma.aggregate({
+            _sum: {
+                likesCount: true,
+            },
+            where: {
+                organizationId,
+            },
+        })
+
+        return result._sum.likesCount || 0
+    }
 }
