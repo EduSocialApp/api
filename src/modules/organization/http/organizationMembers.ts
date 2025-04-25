@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 
 import organizationMemberService from '../member/organizationmember.service'
-import { AppError } from '@/functions/AppError'
+import { AppError } from '../../../functions/AppError'
 
 /**
  * Verifica se o usuário autenticado tem permissão para listar membros de uma organização

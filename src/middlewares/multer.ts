@@ -1,5 +1,5 @@
 import multer from 'multer'
-import uuid from '@/functions/uuid'
+import uuid from '../functions/uuid'
 import mime from 'mime/lite'
 import { resolve } from 'path'
 

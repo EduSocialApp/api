@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { AppError } from '@/functions/AppError'
+import { AppError } from '../../../functions/AppError'
 
 import dbOrganizationMember from '../member/organizationmember.service'
 

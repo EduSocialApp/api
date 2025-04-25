@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import dbUser from '../user.service'
-import { AppError } from '@/functions/AppError'
+import { AppError } from '../../../functions/AppError'
 
 /**
  * Atualiza a foto de perfil do usuário logado

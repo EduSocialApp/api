@@ -1,5 +1,5 @@
-import { AppError } from '@/functions/AppError'
-import { gravatarProfilePictureUrl } from '@/functions/gravatar'
+import { AppError } from '../../../functions/AppError'
+import { gravatarProfilePictureUrl } from '../../../functions/gravatar'
 import { NextFunction, Request, Response } from 'express'
 
 import organization from '../organization.service'

@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
 
-import dbPost from '@/modules/post/post.service'
+import dbPost from '../../../modules/post/post.service'
 import dbUser from '../user.service'
-import { AppError } from '@/functions/AppError'
+import { AppError } from '../../../functions/AppError'
 
 /**
  * Busca feed do usuario

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 
-import dbPost from '@/modules/post/post.service'
+import dbPost from '../../../modules/post/post.service'
 
 export default async function getUserPosts(request: Request, response: Response, next: NextFunction) {
     dbPost.userLoggedId = request.user.id

@@ -1,7 +1,7 @@
-import { createAccessToken } from '@/functions/jwt'
+import { createAccessToken } from '../../functions/jwt'
 import SessionController from './session.controller'
-import { addDays } from '@/functions/days'
-import { AppError } from '@/functions/AppError'
+import { addDays } from '../../functions/days'
+import { AppError } from '../../functions/AppError'
 
 export class Session extends SessionController {
     private daysLimitSession = 30

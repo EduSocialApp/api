@@ -1,10 +1,10 @@
 import { Router, Request, Response } from 'express'
 
-import { userRoutes } from '@/modules/user/user.routes'
-import { orgRoutes } from '@/modules/organization/organization.routes'
+import { userRoutes } from '../modules/user/user.routes'
+import { orgRoutes } from '../modules/organization/organization.routes'
 import { findRoutes } from './find.routes'
-import { shareLinkRoutes } from '@/modules/shareLink/sharelink.routes'
-import { postRoutes } from '@/modules/post/post.routes'
+import { shareLinkRoutes } from '../modules/shareLink/sharelink.routes'
+import { postRoutes } from '../modules/post/post.routes'
 
 const router = Router()
 

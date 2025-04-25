@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 
-import dbPost from '@/modules/post/post.service'
+import dbPost from '../../../../modules/post/post.service'
 
 export default async function getOrganizationPosts(request: Request, response: Response, next: NextFunction) {
     try {

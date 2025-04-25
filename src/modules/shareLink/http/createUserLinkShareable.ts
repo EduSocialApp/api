@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 
 import user from '../sharelink.service'
-import { AppError } from '@/functions/AppError'
+import { AppError } from '../../../functions/AppError'
 
 /**
  * Cria link de compartilhamento de usuario

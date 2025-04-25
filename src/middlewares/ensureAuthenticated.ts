@@ -1,9 +1,9 @@
-import { AppError } from '@/functions/AppError'
+import { AppError } from '../functions/AppError'
 import { NextFunction, Request, Response } from 'express'
-import { verifyAcessToken } from '@/functions/jwt'
+import { verifyAcessToken } from '../functions/jwt'
 
-import dbUser, { User } from '@/modules/user/user.service'
-import dbSession from '@/modules/session/session.service'
+import dbUser, { User } from '../modules/user/user.service'
+import dbSession from '../modules/session/session.service'
 
 interface Payload {
     sub: string

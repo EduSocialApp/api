@@ -1,5 +1,5 @@
 import { prisma } from '../db'
-import { generateRandomText } from '@/functions/generate'
+import { generateRandomText } from '../../functions/generate'
 
 export default class ShareLinkController {
     private prisma = prisma.shareLink

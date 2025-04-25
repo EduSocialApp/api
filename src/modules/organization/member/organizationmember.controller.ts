@@ -1,4 +1,4 @@
-import uuid from '@/functions/uuid'
+import uuid from '../../../functions/uuid'
 
 import { prisma } from '../../db'
 import { RoleOrganizationEnum } from '@prisma/client'

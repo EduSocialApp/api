@@ -1,9 +1,9 @@
-import { validatePasswordHash } from '@/functions/password'
+import { validatePasswordHash } from '../../functions/password'
 
-import { createAccessToken } from '@/functions/jwt'
-import { AppError } from '@/functions/AppError'
+import { createAccessToken } from '../../functions/jwt'
+import { AppError } from '../../functions/AppError'
 
-import session from '@/modules/session/session.service'
+import session from '../../modules/session/session.service'
 
 import UserController from './user.controller'
 

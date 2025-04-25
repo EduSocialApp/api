@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import sort from 'lodash/sortBy'
 
-import { ensureAuthenticated } from '@/middlewares/ensureAuthenticated'
+import { ensureAuthenticated } from '../middlewares/ensureAuthenticated'
 
 import dbOrganizations from '../modules/organization/organization.service'
 import dbUser from '../modules/user/user.service'

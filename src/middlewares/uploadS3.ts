@@ -1,5 +1,5 @@
-import { AppError } from '@/functions/AppError'
-import { awsS3Upload } from '@/functions/aws/s3/upload'
+import { AppError } from '../functions/AppError'
+import { awsS3Upload } from '../functions/aws/s3/upload'
 import { NextFunction, Request, Response } from 'express'
 
 /**

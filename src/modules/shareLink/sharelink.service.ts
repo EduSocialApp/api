@@ -1,6 +1,6 @@
 import { ShareLink as IShareLink } from '@prisma/client'
 import ShareLinkController from './sharelink.controller'
-import { AppError } from '@/functions/AppError'
+import { AppError } from '../../functions/AppError'
 
 export class ShareLink extends ShareLinkController {
     async verifySharedLink(id: string): Promise<IShareLink> {

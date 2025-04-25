@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
 
-import dbPost from '@/modules/post/post.service'
-import dbMedia from '@/modules/media/media.service'
-import { awsS3Upload } from '@/functions/aws/s3/upload'
+import dbPost from '../../../../modules/post/post.service'
+import dbMedia from '../../../../modules/media/media.service'
+import { awsS3Upload } from '../../../../functions/aws/s3/upload'
 
 /**
  * Cria uma nova postagem com o usuario logado e organizacao selecionada

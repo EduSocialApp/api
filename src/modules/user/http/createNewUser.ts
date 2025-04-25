@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
 
-import { passwordToHash } from '@/functions/password'
-import { AppError } from '@/functions/AppError'
-import { gravatarProfilePictureUrl } from '@/functions/gravatar'
+import { passwordToHash } from '../../../functions/password'
+import { AppError } from '../../../functions/AppError'
+import { gravatarProfilePictureUrl } from '../../../functions/gravatar'
 
 import user from '../user.service'
 
