@@ -26,6 +26,7 @@ export default class PostController {
         content,
         startDate,
         endDate,
+        addressId,
         level = PostLevelEnum.NORMAL,
     }: {
         userId?: string
@@ -35,6 +36,7 @@ export default class PostController {
         startDate?: Date
         endDate?: Date
         level?: PostLevelEnum
+        addressId?: string
     }) {
         return this.prisma.create({
             data: {
@@ -46,6 +48,7 @@ export default class PostController {
                 startDate,
                 endDate,
                 level,
+                adressId: addressId,
             },
         })
     }

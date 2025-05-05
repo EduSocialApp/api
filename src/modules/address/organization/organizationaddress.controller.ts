@@ -33,4 +33,15 @@ export default class OrganizationAddressController {
             },
         })
     }
+
+    async isAddressInOrganization(organizationId: string, addressId: string) {
+        const addressLink = await this.prisma.findFirst({
+            where: {
+                organizationId,
+                addressId,
+            },
+        })
+
+        return !!addressLink
+    }
 }

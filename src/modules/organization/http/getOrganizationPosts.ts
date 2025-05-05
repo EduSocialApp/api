@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express'
 
-import dbPost from '../../../../modules/post/post.service'
+import dbPost from '../../../modules/post/post.service'
 
 export default async function getOrganizationPosts(request: Request, response: Response, next: NextFunction) {
     try {
-        const { organizationId } = request.params as { organizationId: string }
+        const { id: organizationId } = request.params as { id: string }
         let { lastPostId } = request.query as { lastPostId: string }
 
         const listPosts = await dbPost.getFeed([], [organizationId], lastPostId, 30)

@@ -21,9 +21,10 @@ import organizationMembers from './http/organizationMembers'
 import userPermissionsInOrganization from './http/userPermissionsInOrganization'
 import approveUserLinkOrganization from './http/approveUserLinkOrganization'
 import userOrganizations from './http/userOrganizations'
-import getOrganizationPosts from './http/posts/getOrganizationPosts'
+import getOrganizationPosts from './http/getOrganizationPosts'
 import { generateBlurhash } from '../../middlewares/generateBlurhash'
-import createNewPost from './http/posts/createNewPost'
+import createNewPost from './http/createNewPost'
+import getOrganizationAddresses from './http/getOrganizationAddresses'
 
 const orgRoutes = Router()
 
@@ -37,13 +38,13 @@ orgRoutes.post('/member/:organizationMemberId/approve', ensureAuthenticated, app
 orgRoutes.post('/member/:organizationMemberId/unlink', ensureAuthenticated, unlinkUserOrganization)
 
 // Post
-orgRoutes.post('/:organizationId/posts', ensureAuthenticated, uploadMultipleFilesMiddleware, generateBlurhash, createNewPost)
-orgRoutes.get('/:organizationId/posts', ensureAuthenticated, getOrganizationPosts)
-
 orgRoutes.get('/:id', ensureAuthenticated, ensureOrgExists, findOrganizationById)
 orgRoutes.get('/:id/totalMembers', ensureAuthenticated, ensureOrgExists, totalMembersInOrganization)
 orgRoutes.get('/:id/members', ensureAuthenticated, ensureOrgExists, organizationMembers)
 orgRoutes.get('/:id/role', ensureAuthenticated, ensureOrgExists, userPermissionsInOrganization)
+orgRoutes.get('/:id/addresses', ensureAuthenticated, ensureOrgExists, getOrganizationAddresses)
+orgRoutes.get('/:id/posts', ensureAuthenticated, ensureOrgExists, getOrganizationPosts)
+orgRoutes.post('/:id/posts', ensureAuthenticated, ensureOrgExists, uploadMultipleFilesMiddleware, generateBlurhash, createNewPost)
 
 orgRoutes.post('/:id/link', ensureAuthenticated, ensureOrgExists, linkUserOrganization)
 
