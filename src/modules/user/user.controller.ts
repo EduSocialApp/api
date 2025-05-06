@@ -174,7 +174,6 @@ export default class UserController {
             include: {
                 organizations: {
                     select: {
-                        id: true,
                         role: true,
                         organization: {
                             select: {

@@ -102,12 +102,27 @@ export default class PostController {
                 likesCount: true,
                 updatedAt: true,
                 createdAt: true,
+                startDate: true,
+                endDate: true,
+                level: true,
                 user: {
                     select: {
                         id: true,
                         name: true,
                         displayName: true,
                         pictureUrl: true,
+                    },
+                },
+                address: {
+                    select: {
+                        city: true,
+                        state: true,
+                        country: true,
+                        street: true,
+                        number: true,
+                        neighborhood: true,
+                        complement: true,
+                        zipCode: true,
                     },
                 },
                 organization: {
@@ -136,8 +151,165 @@ export default class PostController {
                           where: {
                               userId: this.userLoggedId,
                           },
+                          select: {
+                              userId: true,
+                              postId: true,
+                              updatedAt: true,
+                          },
                       }
                     : undefined,
+            },
+        })
+    }
+
+    getEvents(usersId: string[], organizationsId: string[]) {
+        const now = new Date()
+        return this.prisma.findMany({
+            where: {
+                AND: [
+                    {
+                        organizationId: {
+                            in: organizationsId,
+                        },
+                    },
+                    {
+                        startDate: {
+                            // Data de início não pode ser nula
+                            not: null,
+                        },
+                    },
+                    {
+                        OR: [
+                            {
+                                // Em andamento
+                                AND: [
+                                    {
+                                        startDate: {
+                                            lte: now,
+                                        },
+                                    },
+                                    {
+                                        endDate: {
+                                            gte: now,
+                                        },
+                                    },
+                                ],
+                            },
+                            {
+                                startDate: {
+                                    gt: new Date(), // Futuros
+                                },
+                            },
+                            {
+                                // Eventos que não foi definido data de término, então considera apenas como evento do dia
+                                AND: [
+                                    { endDate: null }, // Sem data de término
+                                    {
+                                        startDate: {
+                                            lte: now, // Data de início menor ou igual a data atual
+                                            gte: new Date(now.getFullYear(), now.getMonth(), now.getDate()), // Data de início maior ou igual a data atual
+                                        },
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                    {
+                        OR: [
+                            {
+                                notifiedUsers: {
+                                    none: {}, // Sem usuários especificados = para todos os usuários
+                                },
+                            },
+                            {
+                                notifiedUsers: {
+                                    // Se tem usuários especificados, verifica se a lista de usuários está na lista do post
+                                    some: {
+                                        userId: {
+                                            in: usersId,
+                                        },
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                ],
+            },
+            select: {
+                id: true,
+                title: true,
+                content: true,
+                likesCount: true,
+                updatedAt: true,
+                createdAt: true,
+                startDate: true,
+                endDate: true,
+                level: true,
+                address: {
+                    select: {
+                        city: true,
+                        state: true,
+                        country: true,
+                        street: true,
+                        number: true,
+                        neighborhood: true,
+                        complement: true,
+                        zipCode: true,
+                    },
+                },
+                organization: {
+                    select: {
+                        id: true,
+                        name: true,
+                        displayName: true,
+                        pictureUrl: true,
+                        verified: true,
+                    },
+                },
+                medias: {
+                    select: {
+                        media: {
+                            select: {
+                                id: true,
+                                mediaUrl: true,
+                                description: true,
+                                blurhash: true,
+                            },
+                        },
+                    },
+                },
+                notifiedUsers: {
+                    where: {
+                        userId: {
+                            in: usersId,
+                        },
+                    },
+                    select: {
+                        user: {
+                            select: {
+                                id: true,
+                                name: true,
+                                displayName: true,
+                                pictureUrl: true,
+                            },
+                        },
+                    },
+                },
+                likes: this.userLoggedId // Se o usuario estiver logado, verifica se ele curtiu a postagem
+                    ? {
+                          where: {
+                              userId: this.userLoggedId,
+                          },
+                          select: {
+                              userId: true,
+                              postId: true,
+                              updatedAt: true,
+                          },
+                      }
+                    : undefined,
+            },
+            orderBy: {
+                startDate: 'asc',
             },
         })
     }
@@ -160,6 +332,9 @@ export default class PostController {
                         },
                     },
                 ],
+                AND: {
+                    startDate: null,
+                },
             },
             select: {
                 id: true,

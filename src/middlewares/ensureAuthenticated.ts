@@ -45,7 +45,7 @@ export async function ensureAuthenticated(request: Request, response: Response, 
             notificationToken: user.receiveNotifications ? session.notificationToken : null, // Token de notificacao
             supervisedUsers: user.supervisorUsers.map(({ supervisedUserId }) => supervisedUserId), // Usuarios supervisionados
             supervisorUsers: user.supervisedUsers.map(({ supervisorUserId }) => supervisorUserId), // Usuarios supervisores
-            organizations: user.organizations.map(({ id, role }) => ({ id, role })), // Organizacoes que o usuario pertence
+            organizations: user.organizations.map(({ role, organization }) => ({ role, id: organization.id })), // Organizacoes que o usuario pertence
         }
 
         next()

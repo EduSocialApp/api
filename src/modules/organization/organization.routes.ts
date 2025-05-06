@@ -25,6 +25,7 @@ import getOrganizationPosts from './http/getOrganizationPosts'
 import { generateBlurhash } from '../../middlewares/generateBlurhash'
 import createNewPost from './http/createNewPost'
 import getOrganizationAddresses from './http/getOrganizationAddresses'
+import getOrganizationEvents from './http/getOrganizationEvents'
 
 const orgRoutes = Router()
 
@@ -44,6 +45,7 @@ orgRoutes.get('/:id/members', ensureAuthenticated, ensureOrgExists, organization
 orgRoutes.get('/:id/role', ensureAuthenticated, ensureOrgExists, userPermissionsInOrganization)
 orgRoutes.get('/:id/addresses', ensureAuthenticated, ensureOrgExists, getOrganizationAddresses)
 orgRoutes.get('/:id/posts', ensureAuthenticated, ensureOrgExists, getOrganizationPosts)
+orgRoutes.get('/:id/events', ensureAuthenticated, ensureOrgExists, getOrganizationEvents)
 orgRoutes.post('/:id/posts', ensureAuthenticated, ensureOrgExists, uploadMultipleFilesMiddleware, generateBlurhash, createNewPost)
 
 orgRoutes.post('/:id/link', ensureAuthenticated, ensureOrgExists, linkUserOrganization)

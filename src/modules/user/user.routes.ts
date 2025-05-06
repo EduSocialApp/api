@@ -20,12 +20,16 @@ import { generateBlurhash } from '../../middlewares/generateBlurhash'
 import getUserPosts from './http/getUserPosts'
 import { ensureCanViewUserProfile } from '../../middlewares/privileges/ensureCanViewUserProfile'
 import { ensureCanEditUserProfile } from '../../middlewares/privileges/ensureCanEditUserProfile'
+import getUserEvents from './http/getUserEvents'
 
 const userRoutes = Router()
 
 // Post
 userRoutes.post('/posts', ensureAuthenticated, uploadMultipleFilesMiddleware, generateBlurhash, createNewPost)
 userRoutes.get('/posts', ensureAuthenticated, getUserLoggedFeed)
+
+// Events
+userRoutes.get('/events', ensureAuthenticated, getUserEvents)
 
 // Supervisor
 userRoutes.get('/supervisedUsers', ensureAuthenticated, getSupervisedUsers)
