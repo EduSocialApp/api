@@ -166,6 +166,58 @@ export default class UserController {
         })
     }
 
+    contactList(userId: string) {
+        return this.prisma.findUnique({
+            where: {
+                id: userId,
+            },
+            select: {
+                id: true,
+                name: true,
+                displayName: true,
+                pictureUrl: true,
+                organizations: {
+                    select: {
+                        role: true,
+                        organization: {
+                            select: {
+                                id: true,
+                                name: true,
+                                displayName: true,
+                                pictureUrl: true,
+                                verified: true,
+                            },
+                        },
+                    },
+                },
+                supervisedUsers: {
+                    select: {
+                        supervisedUser: {
+                            select: {
+                                id: true,
+                                name: true,
+                                displayName: true,
+                                pictureUrl: true,
+                            },
+                        },
+                    },
+                },
+                supervisorUsers: {
+                    select: {
+                        supervisorUser: {
+                            select: {
+                                id: true,
+                                name: true,
+                                displayName: true,
+                                pictureUrl: true,
+                            },
+                        },
+                    },
+                },
+            },
+        })
+    }
+
     findByIdDetailed(id: string) {
         return this.prisma.findUnique({
             where: {

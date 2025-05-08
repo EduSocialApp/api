@@ -21,6 +21,7 @@ import getUserPosts from './http/getUserPosts'
 import { ensureCanViewUserProfile } from '../../middlewares/privileges/ensureCanViewUserProfile'
 import { ensureCanEditUserProfile } from '../../middlewares/privileges/ensureCanEditUserProfile'
 import getUserEvents from './http/getUserEvents'
+import getLoggedContactList from './http/getLoggedContactList'
 
 const userRoutes = Router()
 
@@ -46,6 +47,7 @@ userRoutes.get('/totalNotifications', ensureAuthenticated, hasNewNotifications)
 userRoutes.get('/pendingOrganizations', ensureAuthenticated, pendingOrganizations)
 userRoutes.post('/register', createNewUser)
 userRoutes.get('/toInvite', ensureAuthenticated, listUsersToInvite)
+userRoutes.get('/contactList', ensureAuthenticated, getLoggedContactList)
 
 userRoutes.patch('/:id/profilePicture', ensureAuthenticated, ensureCanEditUserProfile, uploadSingleFileMiddleware, uploadS3Middleware, profilePicture)
 userRoutes.patch('/:id', ensureAuthenticated, ensureCanEditUserProfile, updateProfileInformations)

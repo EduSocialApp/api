@@ -12,42 +12,44 @@ datasource db {
 // ------------------------------------------------------------------
 
 model User {
-    id                   String               @id // UUID
+    id                   String                    @id // UUID
     name                 String // Nome completo
     displayName          String // Nome de exibição
     biography            String // Biografia
-    email                String               @unique // Email
-    emailVerified        Boolean              @default(false) // Email verificado
+    email                String                    @unique // Email
+    emailVerified        Boolean                   @default(false) // Email verificado
     password             String // Senha criptografada
     document             String // Documento de indentificação
     documentType         DocumentEnum // Tipo de documento
-    documentVerified     Boolean              @default(false) // Documento verificado (usuário verificado)
+    documentVerified     Boolean                   @default(false) // Documento verificado (usuário verificado)
     pictureUrl           String // URL da foto de perfil
     phone                String // Telefone ou celular
-    phoneVerified        Boolean              @default(false) // Telefone verificado
+    phoneVerified        Boolean                   @default(false) // Telefone verificado
     scopes               String[] // Escopos que o usuário tem acesso
     adressesIds          String[] // IDs dos endereços do usuário
     role                 RoleEnum // Papel do usuário
     birthday             DateTime // Data de nascimento
-    receiveEmails        Boolean              @default(true) // Receber emails
-    receiveNotifications Boolean              @default(true) // Receber notificações
-    connectWithNeighbors Boolean              @default(true) // Conectar com a agenda do celular
-    termsAccepted        Boolean              @default(false) // Termos de uso aceitos
-    privacyAccepted      Boolean              @default(false) // Política de privacidade aceita
-    createdAt            DateTime             @default(now()) // Data de criação
-    updatedAt            DateTime             @default(now()) @updatedAt // Data de atualização
+    receiveEmails        Boolean                   @default(true) // Receber emails
+    receiveNotifications Boolean                   @default(true) // Receber notificações
+    connectWithNeighbors Boolean                   @default(true) // Conectar com a agenda do celular
+    termsAccepted        Boolean                   @default(false) // Termos de uso aceitos
+    privacyAccepted      Boolean                   @default(false) // Política de privacidade aceita
+    createdAt            DateTime                  @default(now()) // Data de criação
+    updatedAt            DateTime                  @default(now()) @updatedAt // Data de atualização
     sessions             Session[] // Sessões do usuário
     organizations        OrganizationMember[] // Organizações que o usuário faz parte  
-    supervisedUsers      SupervisedUser[]     @relation("SupervisedUsers") // Usuários supervisionados
-    supervisorUsers      SupervisedUser[]     @relation("SupervisorUsers") // Usuários que supervisionam este usuário
+    supervisedUsers      SupervisedUser[]          @relation("SupervisedUsers") // Usuários supervisionados
+    supervisorUsers      SupervisedUser[]          @relation("SupervisorUsers") // Usuários que supervisionam este usuário
     posts                Post[] // Posts do usuário
     likes                PostLike[] // Curtidas do usuário
     comments             PostComment[] // Comentários do usuário
     addresses            UserAddress[] // Endereços do usuário
-    reports              UserReport[]         @relation("ReportedUser") // Comunicados feitos para o usuário
-    reportsCreated       UserReport[]         @relation("ReportAuthor") // Comunicados feitos pelo usuário
+    reports              UserReport[]              @relation("ReportedUser") // Comunicados feitos para o usuário
+    reportsCreated       UserReport[]              @relation("ReportAuthor") // Comunicados feitos pelo usuário
     sharedLinks          ShareLink[] // Links compartilhados
     notifiedPosts        PostNotifiedUsers[] // Posts destinados ao usuário
+    conversations        ConversationParticipant[] // Conversas do usuário
+    messagesSent         Message[] // Mensagens enviadas pelo usuário
 }
 
 model UserReport {
@@ -92,6 +94,41 @@ model Post {
     medias         PostMedia[] // Mídias
     notifiedUsers  PostNotifiedUsers[] // Usuários notificados
     address        Address?            @relation(fields: [adressId], references: [id]) // Endereço
+}
+
+model Conversation {
+    id               String                    @id
+    status           ConversationStatusEnum    @default(PENDING)
+    unresolvedReason String? // Motivo da não resolução
+    participants     ConversationParticipant[]
+    isPrivate        Boolean                   @default(false) // Conversa privada
+    messages         Message[]
+    createdAt        DateTime                  @default(now())
+    updatedAt        DateTime                  @default(now()) @updatedAt
+}
+
+model ConversationParticipant {
+    conversationId String
+    userId         String
+    organizationId String?
+    role           RoleConversationParticipantEnum @default(MEMBER) // Papel do usuário na conversa
+    conversation   Conversation                    @relation(fields: [conversationId], references: [id])
+    user           User                            @relation(fields: [userId], references: [id])
+    organization   Organization?                   @relation(fields: [organizationId], references: [id])
+
+    @@id([conversationId, userId])
+}
+
+model Message {
+    id             String       @id // UUID
+    userId         String // ID do usuário que enviou a mensagem
+    conversationId String // ID da conversa
+    content        String // Conteúdo da mensagem
+    mediaId        String? // ID da mídia
+    createdAt      DateTime     @default(now()) // Data de criação
+    conversation   Conversation @relation(fields: [conversationId], references: [id]) // Conversa
+    user           User         @relation(fields: [userId], references: [id]) // Usuário
+    media          Media?       @relation(fields: [mediaId], references: [id]) // Mídia
 }
 
 model PostNotifiedUsers {
@@ -146,23 +183,24 @@ model SupervisedUser {
 }
 
 model Organization {
-    id                          String                @id // UUID
+    id                          String                    @id // UUID
     name                        String // Nome
     displayName                 String // Nome de exibição
     biography                   String // Biografia
     email                       String // Email 
     phone                       String // Telefone
-    verified                    Boolean               @default(false) // Organização verificada
+    verified                    Boolean                   @default(false) // Organização verificada
     rejectedVerificationMessage String? // Mensagem de rejeição da verificação
     document                    String // Documento de identificação
     documentType                DocumentEnum // Tipo de documento
     pictureUrl                  String // URL da foto de perfil
-    createdAt                   DateTime              @default(now()) // Data de criação
-    updatedAt                   DateTime              @default(now()) @updatedAt // Data de atualização
+    createdAt                   DateTime                  @default(now()) // Data de criação
+    updatedAt                   DateTime                  @default(now()) @updatedAt // Data de atualização
     members                     OrganizationMember[] // Membros da organização
     posts                       Post[] // Posts da organização
     addresses                   OrganizationAddress[] // Endereços da organização
     reportsReleased             UserReport[] // Comunicados feitos pela organização
+    conversations               ConversationParticipant[] // Conversas da organização
 }
 
 model OrganizationAddress {
@@ -219,13 +257,14 @@ model ShareLink {
 }
 
 model Media {
-    id          String      @id // UUID
-    description String // Descrição da mídia
-    mediaUrl    String // URL da mídia
-    blurhash    String? // Hash do BlurHash
-    createdAt   DateTime    @default(now()) // Data de criação
-    updatedAt   DateTime    @default(now()) @updatedAt // Data de atualização
-    postsMedias PostMedia[] // Mídias dos posts
+    id             String      @id // UUID
+    description    String // Descrição da mídia
+    mediaUrl       String // URL da mídia
+    blurhash       String? // Hash do BlurHash
+    createdAt      DateTime    @default(now()) // Data de criação
+    updatedAt      DateTime    @default(now()) @updatedAt // Data de atualização
+    postsMedias    PostMedia[] // Mídias dos posts
+    messagesMedias Message[]
 }
 
 model Session {
@@ -239,6 +278,13 @@ model Session {
     createdAt         DateTime @default(now()) // Data de criação
     updatedAt         DateTime @default(now()) @updatedAt // Data de atualização
     user              User     @relation(fields: [userId], references: [id]) // Usuário
+}
+
+enum ConversationStatusEnum {
+    PENDING
+    ACTIVE
+    RESOLVED
+    UNRESOLVED
 }
 
 // Documentos de identificação
@@ -276,4 +322,11 @@ enum RoleOrganizationEnum {
 enum ShareLinkTypeEnum {
     USER
     ORGANIZATION
+}
+
+enum RoleConversationParticipantEnum {
+    SENDER
+    RECIPIENT
+    MEMBER
+    SENDER_RECIPIENT
 }

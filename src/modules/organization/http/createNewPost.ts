@@ -62,6 +62,7 @@ export default async function createNewPost(request: Request, response: Response
             endDate: objEndDate,
             level: dbPost.parsePostLevel(level),
             title,
+            addressId,
         })
 
         // Adiciona arquivos a postagem (caso existam)
