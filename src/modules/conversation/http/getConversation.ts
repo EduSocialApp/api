@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 
 import dbConversation from '../conversation.service'
-import { AppError } from 'src/functions/AppError'
+import { AppError } from '../../../functions/AppError'
 
 export async function getConversation(request: Request, response: Response, next: NextFunction) {
     try {

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 
 import dbUser from '../user.service'
-import { AppError } from 'src/functions/AppError'
+import { AppError } from '../../../functions/AppError'
 
 export default async function getLoggedContactList(request: Request, response: Response, next: NextFunction) {
     try {

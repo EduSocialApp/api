@@ -4,7 +4,7 @@ import dbConversation from '../conversation.service'
 import dbConversationParticipant from '../participant/conversationparticipant.service'
 import dbMessage from '../../message/message.service'
 import dbOrganization from '../../organization/organization.service'
-import { AppError } from 'src/functions/AppError'
+import { AppError } from '../../../functions/AppError'
 import { RoleConversationParticipantEnum } from '@prisma/client'
 
 export async function startConversation(request: Request, response: Response, next: NextFunction) {
