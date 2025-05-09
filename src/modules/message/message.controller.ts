@@ -1,4 +1,4 @@
-import uuid from 'src/functions/uuid'
+import uuid from '../../functions/uuid'
 import { prisma } from '../db'
 
 export default class MessageController {

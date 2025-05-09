@@ -5,8 +5,8 @@ import { orgRoutes } from '../modules/organization/organization.routes'
 import { findRoutes } from './find.routes'
 import { shareLinkRoutes } from '../modules/shareLink/sharelink.routes'
 import { postRoutes } from '../modules/post/post.routes'
-import { conversationRoutes } from 'src/modules/conversation/conversation.routes'
-import { ensureAuthenticated } from 'src/middlewares/ensureAuthenticated'
+import { conversationRoutes } from '../modules/conversation/conversation.routes'
+import { ensureAuthenticated } from '../middlewares/ensureAuthenticated'
 
 const router = Router()
 
