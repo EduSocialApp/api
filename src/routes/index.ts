@@ -6,6 +6,7 @@ import { findRoutes } from './find.routes'
 import { shareLinkRoutes } from '../modules/shareLink'
 import { postRoutes } from '../modules/post'
 import { conversationRoutes } from '../modules/conversation'
+import { messageRoutes } from '../modules/message'
 
 console.log('aqui')
 
@@ -23,5 +24,6 @@ router.use('/find', findRoutes)
 router.use('/link', shareLinkRoutes)
 router.use('/post', postRoutes)
 router.use('/conversation', ensureAuthenticated, conversationRoutes)
+router.use('/message', ensureAuthenticated, messageRoutes)
 
 export default router

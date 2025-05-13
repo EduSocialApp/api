@@ -13,6 +13,45 @@ export default class Conversation {
         })
     }
 
+    findByUserId(userId: string) {
+        return this.prisma.findMany({
+            where: {
+                participants: {
+                    some: {
+                        userId,
+                    },
+                },
+            },
+            select: {
+                id: true,
+                isPrivate: true,
+                createdAt: true,
+                updatedAt: true,
+                status: true,
+                unresolvedReason: true,
+                messages: {
+                    take: 1,
+                    select: {
+                        id: true,
+                        content: true,
+                        createdAt: true,
+                        user: {
+                            select: {
+                                id: true,
+                                displayName: true,
+                                name: true,
+                                pictureUrl: true,
+                            },
+                        },
+                    },
+                    orderBy: {
+                        createdAt: 'desc',
+                    },
+                },
+            },
+        })
+    }
+
     findById(id: string, withMessages = false, withParticipants = false) {
         return this.prisma.findUnique({
             where: {

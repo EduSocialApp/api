@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express'
 import { conversation as dbConversation } from '../services/conversation.service'
 import { organization as dbOrganization } from '../../organization'
 import { conversationParticipant as dbConversationParticipant } from '../services/participant/conversationParticipant.service'
-import { message as dbMessage } from '../../message'
+import { message as dbMessage } from '../../message/services/message.service'
 import { AppError } from '../../../functions/AppError'
 import { RoleConversationParticipantEnum } from '@prisma/client'
 

@@ -14,4 +14,13 @@ export default class ConversationParticipant {
             },
         })
     }
+
+    findById(conversationId: string, userId: string) {
+        return this.prisma.findFirst({
+            where: {
+                conversationId,
+                userId,
+            },
+        })
+    }
 }
