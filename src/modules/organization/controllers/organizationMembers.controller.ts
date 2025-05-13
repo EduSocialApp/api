@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 
-import organizationMemberService from '../services/member/organizationMember.service'
+import { organizationMember } from '../services/member/organizationMember.service'
 import { AppError } from '../../../functions/AppError'
 
 /**
@@ -11,7 +11,7 @@ async function hasPermissionToListOrganizationMembers(user: Request['user'], org
     if (user.role === 'ADMIN' || user.role === 'MODERATOR') return true
 
     // Se for usuário comum, verifica se é membro da organização
-    const orgMember = await organizationMemberService.findByUserIdAndOrganizationId(user.id, orgId)
+    const orgMember = await organizationMember.findByUserIdAndOrganizationId(user.id, orgId)
 
     // Se não for membro, não pode listar membros
     if (orgMember) return true
@@ -22,7 +22,7 @@ async function hasPermissionToListOrganizationMembers(user: Request['user'], org
 /**
  * Retorna lista de membros de uma organização
  */
-export default async function organizationMembers(request: Request, response: Response, next: NextFunction) {
+export async function organizationMembers(request: Request, response: Response, next: NextFunction) {
     try {
         const { id } = request.params
         let { lastOrganizationMemberId } = request.query as { lastOrganizationMemberId: string }
@@ -31,7 +31,7 @@ export default async function organizationMembers(request: Request, response: Re
             throw new AppError('Permission denied', 403)
         }
 
-        const list = await organizationMemberService.listByOrganizationId(id, lastOrganizationMemberId, 20)
+        const list = await organizationMember.listByOrganizationId(id, lastOrganizationMemberId, 20)
 
         lastOrganizationMemberId = list.length > 0 ? list[list.length - 1]?.id : lastOrganizationMemberId
 

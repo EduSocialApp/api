@@ -1,12 +1,12 @@
 import { AppError } from '../../../functions/AppError'
 import { NextFunction, Request, Response } from 'express'
 
-import organization from '../services/organization.service'
+import { organization } from '../services/organization.service'
 
 /**
  * Rejeita uma organizacao
  */
-export default async function rejectOrganization(request: Request, response: Response, next: NextFunction) {
+export async function rejectOrganization(request: Request, response: Response, next: NextFunction) {
     try {
         let { id } = request.params
         const { reason } = request.body as { reason: string }

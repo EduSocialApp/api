@@ -1,4 +1,4 @@
-import { prisma } from '../../../db'
+import { prisma } from '../../../../database/prisma'
 
 export default class AddressOrganization {
     private prisma = prisma.organizationAddress

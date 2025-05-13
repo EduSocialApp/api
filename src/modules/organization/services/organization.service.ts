@@ -1,8 +1,8 @@
 import OrganizationRepository from '../repositories/organization.repository'
 
-import addressOrganization from '../../address/services/organization/addresOrganization.service'
-import organizationMember from '../services/member/organizationMember.service'
-import postService from '../post/post.service'
+import { addressOrganization } from '../../address'
+import { organizationMember } from '../services/member/organizationMember.service'
+import { post } from '../../post'
 
 class Organization extends OrganizationRepository {
     async fullDelete(id: string) {
@@ -12,7 +12,7 @@ class Organization extends OrganizationRepository {
     }
 
     getTotalLikes(id: string) {
-        return postService.countLikesByOrganizationId(id)
+        return post.countLikesByOrganizationId(id)
     }
 
     getTotalMembers(id: string) {
@@ -21,4 +21,4 @@ class Organization extends OrganizationRepository {
 }
 
 const organization = new Organization()
-export default organization
+export { organization }

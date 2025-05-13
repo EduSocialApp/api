@@ -1,5 +1,5 @@
 import uuid from '../../../functions/uuid'
-import { prisma } from '../../db'
+import { prisma } from '../../../database/prisma'
 
 export default class Conversation {
     private prisma = prisma.conversation

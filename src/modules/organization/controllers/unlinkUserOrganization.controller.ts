@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express'
 
 import { AppError } from '../../../functions/AppError'
 
-import organizationMember from '../services/member/organizationMember.service'
+import { organizationMember } from '../services/member/organizationMember.service'
 
 /**
  * Verifica se o usuário logado tem permissão para desvincular um membro com determinada funcao a uma organização
@@ -38,7 +38,7 @@ function hasPermissionToUnlink(
 /**
  * Desvincula um usuário a uma organização
  */
-export default async function unlinkUserOrganization(request: Request, response: Response, next: NextFunction) {
+export async function unlinkUserOrganization(request: Request, response: Response, next: NextFunction) {
     try {
         const { organizationMemberId } = request.params
 

@@ -31,3 +31,4 @@ prisma/migrations
 yarn.lock
 
 dist/
+madge/

@@ -66,4 +66,4 @@ class Session extends SessionRepository {
 }
 
 const session = new Session()
-export default session
+export { session }

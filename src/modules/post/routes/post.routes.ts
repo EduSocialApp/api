@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import { ensureAuthenticated } from 'src/middlewares/ensureAuthenticated'
-import { ensurePostExists } from 'src/middlewares/exists/ensurePostExists'
-import likeOrUnlikePost from '../controllers/likeOrUnlikePost.controller'
-import getPostById from '../controllers/getPostById.controller'
+import { ensureAuthenticated } from '../../user/middlewares/ensureAuthenticated.middleware'
+import { ensurePostExists } from '../middlewares/ensurePostExists.middleware'
+import { likeOrUnlikePost } from '../controllers/likeOrUnlikePost.controller'
+import { getPostById } from '../controllers/getPostById.controller'
 
 const postRoutes = Router()
 

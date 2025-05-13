@@ -2,12 +2,13 @@ import express, { NextFunction, Response, Request } from 'express'
 
 import routes from '../routes'
 import { AppError } from '../functions/AppError'
+import { getLocalIp } from '../functions/getLocalIp'
 
-interface IServer {
+interface Server {
     serverPort: number
 }
 
-function startServer({ serverPort }: IServer) {
+function startServer({ serverPort }: Server) {
     const app = express()
 
     app.use(express.json())
@@ -29,7 +30,7 @@ function startServer({ serverPort }: IServer) {
     })
 
     const server = app.listen(serverPort, () => {
-        console.log(`Server started on ${serverPort} 🟢`)
+        console.log(`EDUSOCIAL-API STARTED 🟢\nPORT: ${serverPort}\nIP: ${getLocalIp()}`)
     })
 
     return { app, server }

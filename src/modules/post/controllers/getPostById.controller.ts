@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
 
-import dbPost from '../services/post.service'
+import { post as dbPost } from '../services/post.service'
 
-export default async function getPostById(request: Request, response: Response, next: NextFunction) {
+export async function getPostById(request: Request, response: Response, next: NextFunction) {
     try {
         const { id } = request.params as { id: string }
 

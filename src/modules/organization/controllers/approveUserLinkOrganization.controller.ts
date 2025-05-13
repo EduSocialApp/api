@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from 'express'
 import { AppError } from '../../../functions/AppError'
 
-import organizationMember from '../services/member/organizationmember.service'
+import { organizationMember } from '../services/member/organizationMember.service'
 
 /**
  * Aceita vinculo com a organizacao
  */
-export default async function approveUserLinkOrganization(request: Request, response: Response, next: NextFunction) {
+export async function approveUserLinkOrganization(request: Request, response: Response, next: NextFunction) {
     try {
         let { organizationMemberId } = request.params // id do link de vinculo
 

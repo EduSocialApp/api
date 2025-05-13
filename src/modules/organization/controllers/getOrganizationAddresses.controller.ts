@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 
 import addressOrganization from '../../address/services/organization/addresOrganization.service'
 
-export default async function getOrganizationAddresses(request: Request, response: Response, next: NextFunction) {
+export async function getOrganizationAddresses(request: Request, response: Response, next: NextFunction) {
     try {
         const { id } = request.params as { id?: string }
 

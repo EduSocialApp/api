@@ -4,7 +4,7 @@ import organization from '../services/organization.service'
 /**
  * Retorna informações básicas de uma organização
  */
-export default async function findOrganizationById(request: Request, response: Response, next: NextFunction) {
+export async function findOrganizationById(request: Request, response: Response, next: NextFunction) {
     try {
         const organizationData = await organization.findByIdWithAddresses(request.params.id)
 

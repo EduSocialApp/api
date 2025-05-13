@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from 'express'
 
-import organizationService from '../services/organization.service'
+import { organization } from '../services/organization.service'
 
 /**
  * Retorna lista de organizações aguardando análise
  */
-export default async function organizationsWaitingForAnalysis(request: Request, response: Response, next: NextFunction) {
+export async function organizationsWaitingForAnalysis(request: Request, response: Response, next: NextFunction) {
     try {
-        const list = await organizationService.waitingVerification()
+        const list = await organization.waitingVerification()
 
         response.status(200).json(list)
     } catch (e) {

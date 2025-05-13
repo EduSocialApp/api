@@ -1,6 +1,6 @@
 import { PostLevelEnum } from '@prisma/client'
 import uuid from '../../../functions/uuid'
-import { prisma } from '../../db'
+import { prisma } from '../../../database/prisma'
 
 export default class Post {
     private prisma = prisma.post

@@ -1,6 +1,6 @@
 import uuid from '../../../functions/uuid'
 
-import { prisma } from '../../db'
+import { prisma } from '../../../database/prisma'
 
 export default class Organization {
     private prisma = prisma.organization

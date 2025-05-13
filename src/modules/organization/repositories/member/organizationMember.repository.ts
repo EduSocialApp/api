@@ -1,6 +1,6 @@
 import uuid from '../../../../functions/uuid'
 
-import { prisma } from '../../../db'
+import { prisma } from '../../../../database/prisma'
 import { RoleOrganizationEnum } from '@prisma/client'
 
 export default class OrganizationMember {

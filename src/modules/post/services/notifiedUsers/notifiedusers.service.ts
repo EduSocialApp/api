@@ -3,4 +3,4 @@ import PostNotifiedUsersRepository from '../../repositories/notifiedUsers/postNo
 class PostNotifiedUsers extends PostNotifiedUsersRepository {}
 
 const postNotifiedUsers = new PostNotifiedUsers()
-export default postNotifiedUsers
+export { postNotifiedUsers }

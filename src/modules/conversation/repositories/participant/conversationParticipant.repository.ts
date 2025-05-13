@@ -1,5 +1,5 @@
 import { RoleConversationParticipantEnum } from '@prisma/client'
-import { prisma } from '../../../db'
+import { prisma } from '../../../../database/prisma'
 
 export default class ConversationParticipant {
     private prisma = prisma.conversationParticipant

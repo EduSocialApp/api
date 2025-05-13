@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from 'express'
 
-import dbConversation from '../services/conversation.service'
-import dbConversationParticipant from '../services/participant/conversationparticipant.service'
-import dbMessage from '../../message/message.service'
-import dbOrganization from '../../organization/organization.service'
+import { conversation as dbConversation } from '../services/conversation.service'
+import { organization as dbOrganization } from '../../organization'
+import { conversationParticipant as dbConversationParticipant } from '../services/participant/conversationParticipant.service'
+import { message as dbMessage } from '../../message'
 import { AppError } from '../../../functions/AppError'
 import { RoleConversationParticipantEnum } from '@prisma/client'
 
-export default async function startConversation(request: Request, response: Response, next: NextFunction) {
+export async function startConversation(request: Request, response: Response, next: NextFunction) {
     try {
         let { content, toUserId, toOrganizationId, fromOrganizationId } = request.body as {
             content?: string

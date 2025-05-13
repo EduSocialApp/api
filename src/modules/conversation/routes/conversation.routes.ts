@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import startConversation from '../controllers/startConversation.controller'
-import getConversation from '../controllers/getConversation.controller'
+import { startConversation } from '../controllers/startConversation.controller'
+import { getConversation } from '../controllers/getConversation.controller'
 
 const conversationRoutes = Router()
 

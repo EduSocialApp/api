@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
 
-import dbConversation from '../services/conversation.service'
+import { conversation as dbConversation } from '../services/conversation.service'
 import { AppError } from '../../../functions/AppError'
 
-export default async function getConversation(request: Request, response: Response, next: NextFunction) {
+export async function getConversation(request: Request, response: Response, next: NextFunction) {
     try {
         const { conversationId } = request.params as {
             conversationId: string

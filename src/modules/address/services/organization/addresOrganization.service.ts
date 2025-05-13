@@ -1,6 +1,6 @@
 import AddressOrganizationRepository from '../../repositories/organization/addressOrganization.repository'
 
-import address from '../address.service'
+import { address } from '../address.service'
 
 export class AddressOrganization extends AddressOrganizationRepository {
     /**
@@ -24,4 +24,4 @@ export class AddressOrganization extends AddressOrganizationRepository {
 }
 
 const addressOrganization = new AddressOrganization()
-export default addressOrganization
+export { addressOrganization }

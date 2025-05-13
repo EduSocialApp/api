@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
 
-import dbPost from '../../../modules/post/post.service'
-import dbUser from '../../../modules/user/user.service'
+import { post as dbPost } from '../../../modules/post'
+import { user as dbUser } from '../../../modules/user'
 
-export default async function getOrganizationEvents(request: Request, response: Response, next: NextFunction) {
+export async function getOrganizationEvents(request: Request, response: Response, next: NextFunction) {
     try {
         const { id: organizationId } = request.params as { id: string }
 

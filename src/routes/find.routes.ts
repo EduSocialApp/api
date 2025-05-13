@@ -1,10 +1,8 @@
 import { Router } from 'express'
 import sort from 'lodash/sortBy'
 
-import { ensureAuthenticated } from '../middlewares/ensureAuthenticated'
-
-import dbOrganizations from '../modules/organization/organization.service'
-import dbUser from '../modules/user/user.service'
+import { organization as dbOrganization } from '../modules/organization/'
+import { user as dbUser, ensureAuthenticated } from '../modules/user'
 
 const findRoutes = Router()
 
@@ -18,7 +16,7 @@ findRoutes.get('/', ensureAuthenticated, async (request, response, next) => {
             users: string
         }
 
-        const listOrganizations = organizations === 'true' ? await dbOrganizations.findByQuery(query, lastOrgId) : []
+        const listOrganizations = organizations === 'true' ? await dbOrganization.findByQuery(query, lastOrgId) : []
         const listUsers = users === 'true' ? await dbUser.findByQuery(query, lastUserId) : []
 
         lastUserId = listUsers.length > 0 ? listUsers[listUsers.length - 1]?.id : lastUserId

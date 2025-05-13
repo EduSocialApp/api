@@ -1,16 +1,16 @@
 import PostLikeRepository from '../../repositories/like/postLike.repository'
 
-import dbPost from '../post.service'
+import { post } from '../post.service'
 
 class PostLike extends PostLikeRepository {
     async like(postId: string, userId: string) {
         await this.create(postId, userId)
-        await dbPost.incrementLikesCounterByPostId(postId)
+        await post.incrementLikesCounterByPostId(postId)
     }
 
     async unlike(postId: string, userId: string) {
         await this.delete(postId, userId)
-        await dbPost.decrementLikesCounterByPostId(postId)
+        await post.decrementLikesCounterByPostId(postId)
     }
 
     async likeOrUnlike(postId: string, userId: string) {
@@ -25,4 +25,4 @@ class PostLike extends PostLikeRepository {
 }
 
 const postLike = new PostLike()
-export default postLike
+export { postLike }

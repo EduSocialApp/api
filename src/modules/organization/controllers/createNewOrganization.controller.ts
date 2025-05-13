@@ -2,16 +2,15 @@ import { AppError } from '../../../functions/AppError'
 import { gravatarProfilePictureUrl } from '../../../functions/gravatar'
 import { NextFunction, Request, Response } from 'express'
 
-import organization from '../services/organization.service'
-import organizationMember from '../services/member/organizationMember.service'
-import dbAddress from '../../address/services/address.service'
-import addressOrganization from '../../address/services/organization/addresOrganization.service'
-import { sendNotificationToAdminsAndModerators } from '../../../functions/sendNotification'
+import { address as dbAddress, addressOrganization } from '../../address'
+import { user } from '../../user'
+import { organization } from '../services/organization.service'
+import { organizationMember } from '../services/member/organizationMember.service'
 
 /**
  * Cria nova organizacao
  */
-export default async function createNewOrganization(request: Request, response: Response, next: NextFunction) {
+export async function createNewOrganization(request: Request, response: Response, next: NextFunction) {
     try {
         let { name, email, document, phone, pictureUrl, address, displayName, biography } = request.body as {
             name: string
@@ -100,7 +99,7 @@ export default async function createNewOrganization(request: Request, response: 
             invited: false,
         })
 
-        sendNotificationToAdminsAndModerators('Nova organização criada', `A organização ${displayName} foi criada`)
+        user.sendNotificationToAdminsAndModerators('Nova organização criada', `A organização ${displayName} foi criada`)
 
         response.status(201).json({
             id,

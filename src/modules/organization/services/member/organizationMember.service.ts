@@ -3,4 +3,4 @@ import OrganizationMemberRepository from '../../repositories/member/organization
 class OrganizationMember extends OrganizationMemberRepository {}
 
 const organizationMember = new OrganizationMember()
-export default organizationMember
+export { organizationMember }

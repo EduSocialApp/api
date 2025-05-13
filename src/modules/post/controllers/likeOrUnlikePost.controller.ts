@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from 'express'
 
-import dbPostLike from '../services/like/postLike.service'
+import { postLike as dbPostLike } from '../services/like/postLike.service'
 
 /**
  * Curte ou descurte uma postagem com o usuario logado
  */
-export default async function likeOrUnlikePost(request: Request, response: Response, next: NextFunction) {
+export async function likeOrUnlikePost(request: Request, response: Response, next: NextFunction) {
     try {
         const { id } = request.params as { id: string }
 

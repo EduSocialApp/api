@@ -1,12 +1,13 @@
 import { Router, Request, Response } from 'express'
 
-import { userRoutes } from '../modules/user/user.routes'
-import { orgRoutes } from '../modules/organization/organization.routes'
+import { userRoutes, ensureAuthenticated } from '../modules/user'
+import { orgRoutes } from '../modules/organization'
 import { findRoutes } from './find.routes'
-import { shareLinkRoutes } from '../modules/shareLink/sharelink.routes'
-import { postRoutes } from '../modules/post/post.routes'
-import { conversationRoutes } from '../modules/conversation/conversation.routes'
-import { ensureAuthenticated } from '../middlewares/ensureAuthenticated'
+import { shareLinkRoutes } from '../modules/shareLink'
+import { postRoutes } from '../modules/post'
+import { conversationRoutes } from '../modules/conversation'
+
+console.log('aqui')
 
 const router = Router()
 

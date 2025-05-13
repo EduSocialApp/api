@@ -1,4 +1,4 @@
-import { prisma } from '../../../db'
+import { prisma } from '../../../../database/prisma'
 
 export default class PostNotifiedUsers {
     private prisma = prisma.postNotifiedUsers
