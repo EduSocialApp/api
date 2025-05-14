@@ -23,4 +23,17 @@ export default class ConversationParticipant {
             },
         })
     }
+
+    async findUserIdsByConversationId(conversationId: string) {
+        return (
+            await this.prisma.findMany({
+                where: {
+                    conversationId,
+                },
+                select: {
+                    userId: true,
+                },
+            })
+        ).map((result) => result.userId)
+    }
 }

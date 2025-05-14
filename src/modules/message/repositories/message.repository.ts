@@ -25,4 +25,32 @@ export default class Message {
             },
         })
     }
+
+    findById(id: string) {
+        return this.prisma.findFirst({
+            where: {
+                id,
+            },
+            select: {
+                id: true,
+                content: true,
+                createdAt: true,
+                conversationId: true,
+                user: {
+                    select: {
+                        id: true,
+                        displayName: true,
+                        name: true,
+                        pictureUrl: true,
+                    },
+                },
+                media: {
+                    select: {
+                        blurhash: true,
+                        mediaUrl: true,
+                    },
+                },
+            },
+        })
+    }
 }

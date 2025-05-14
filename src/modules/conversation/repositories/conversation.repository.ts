@@ -13,6 +13,18 @@ export default class Conversation {
         })
     }
 
+    // Atualiza ultimo update da conversa
+    updateLastActivity(conversationId: string) {
+        return this.prisma.update({
+            where: {
+                id: conversationId,
+            },
+            data: {
+                updatedAt: new Date(),
+            },
+        })
+    }
+
     findByUserId(userId: string) {
         return this.prisma.findMany({
             where: {
@@ -48,6 +60,34 @@ export default class Conversation {
                         createdAt: 'desc',
                     },
                 },
+                participants: {
+                    where: {
+                        OR: [{ role: 'SENDER' }, { role: 'SENDER_RECIPIENT' }, { role: 'RECIPIENT' }],
+                    },
+                    select: {
+                        role: true,
+                        user: {
+                            select: {
+                                id: true,
+                                displayName: true,
+                                name: true,
+                                pictureUrl: true,
+                            },
+                        },
+                        organization: {
+                            select: {
+                                id: true,
+                                name: true,
+                                displayName: true,
+                                pictureUrl: true,
+                                verified: true,
+                            },
+                        },
+                    },
+                },
+            },
+            orderBy: {
+                updatedAt: 'desc',
             },
         })
     }
