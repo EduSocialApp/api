@@ -13,6 +13,7 @@ export function socketInit(httpServer: IServer) {
     })
 
     io.use(async (socket, next) => {
+        console.log(`[SOCKET] Authenticating user...`)
         const token = socket.handshake.auth?.token
 
         try {
@@ -22,6 +23,7 @@ export function socketInit(httpServer: IServer) {
 
             return next()
         } catch {
+            console.log(`[SOCKET] Invalid token`)
             return next(new Error('Invalid token'))
         }
     })
