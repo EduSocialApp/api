@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import organization from '../services/organization.service'
+import { organization } from '../services/organization.service'
 
 /**
  * Retorna informações básicas de uma organização

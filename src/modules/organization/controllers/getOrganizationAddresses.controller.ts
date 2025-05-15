@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 
-import addressOrganization from '../../address/services/organization/addresOrganization.service'
+import { addressOrganization } from '../../address/services/organization/addresOrganization.service'
 
 export async function getOrganizationAddresses(request: Request, response: Response, next: NextFunction) {
     try {
